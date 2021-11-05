@@ -1,8 +1,8 @@
 import { Module } from '@nestjs/common';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
-import { Auth } from 'entities/auth.entity';
-import { AuthModule } from 'modules/auth/auth.module';
+import { Book } from 'entities/book.entity';
+import { BookModule } from 'modules/book/book.module';
 import { User } from 'entities/user.entity';
 import { UsersModule } from 'modules/users/users.module';
 
@@ -15,10 +15,10 @@ import { UsersModule } from 'modules/users/users.module';
       username: 'root',
       password: '',
       database: 'super_holidays',
-      entities: [Auth, User],
+      entities: [User, Book],
       synchronize: true,
     }),
-    AuthModule,
+    BookModule,
     UsersModule,
   ],
   controllers: [],
