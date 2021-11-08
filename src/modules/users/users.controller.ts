@@ -1,11 +1,36 @@
-import { Controller, Get } from '@nestjs/common';
+import { Body, Controller, Post, Get, UseGuards } from '@nestjs/common';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { CreateUserDto } from './create-user.dto';
 import { UsersService } from './users.service';
+import { User } from 'models/users.model';
+import { JwtAuthGuard } from 'modules/auth/jwt-auth.guard';
+import { BlockUserDto } from './block-user.dto';
 
-@Controller('api/users')
+@ApiTags('Users')
+@Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
+
+  @ApiOperation({ summary: 'Create user' })
+  @ApiResponse({ status: 200, type: User })
+  @Post()
+  create(@Body() userDto: CreateUserDto) {
+    return this.usersService.createUser(userDto);
+  }
+
+  @ApiOperation({ summary: 'Get all users' })
+  @ApiResponse({ status: 200, type: [User] })
+  @UseGuards(JwtAuthGuard)
   @Get()
-  getHello(): string {
-    return "I'm a get USER request!";
+  getAll() {
+    return this.usersService.getAllUsers();
+  }
+
+  @ApiOperation({ summary: 'Block users' })
+  @ApiResponse({ status: 200, type: [User] })
+  @UseGuards(JwtAuthGuard)
+  @Post('/block')
+  blockUser(@Body() dto: BlockUserDto) {
+    return this.usersService.blockUser(dto);
   }
 }

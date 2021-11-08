@@ -1,25 +1,30 @@
 import { Module } from '@nestjs/common';
-import { TypeOrmModule } from '@nestjs/typeorm';
-
-import { Book } from 'entities/book.entity';
-import { BookModule } from 'modules/book/book.module';
-import { User } from 'entities/user.entity';
+import { SequelizeModule } from '@nestjs/sequelize';
+import { ConfigModule } from '@nestjs/config';
+import { User } from 'models/users.model';
 import { UsersModule } from 'modules/users/users.module';
+import { AuthModule } from './modules/auth/auth.module';
+import { Booking } from 'models/booking.model';
+import { BookingModule } from './modules/booking/booking.module';
 
 @Module({
   imports: [
-    TypeOrmModule.forRoot({
-      type: 'mysql',
-      host: 'localhost',
-      port: 3306,
-      username: 'root',
-      password: '',
-      database: 'super_holidays',
-      entities: [User, Book],
-      synchronize: true,
+    ConfigModule.forRoot({
+      envFilePath: '.env',
     }),
-    BookModule,
+    SequelizeModule.forRoot({
+      dialect: 'mysql',
+      host: process.env.HOST,
+      port: Number(process.env.PORT),
+      username: process.env.USER,
+      password: '',
+      database: process.env.DB,
+      models: [User, Booking],
+      autoLoadModels: true,
+    }),
     UsersModule,
+    AuthModule,
+    BookingModule,
   ],
   controllers: [],
   providers: [],
