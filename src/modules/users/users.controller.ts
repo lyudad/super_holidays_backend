@@ -4,9 +4,6 @@ import { CreateUserDto } from './create-user.dto';
 import { UsersService } from './users.service';
 import { User } from 'models/users.model';
 import { JwtAuthGuard } from 'modules/auth/jwt-auth.guard';
-import { Roles } from 'modules/auth/roles-auth.decorator';
-import { RolesGuard } from 'modules/auth/roles.guard';
-import { AddRoleDto } from './add-role.dto';
 import { BlockUserDto } from './block-user.dto';
 
 @ApiTags('Users')
@@ -21,8 +18,6 @@ export class UsersController {
     return this.usersService.createUser(userDto);
   }
 
-  @Roles('ADMIN')
-  @UseGuards(RolesGuard)
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: 200, type: [User] })
   @UseGuards(JwtAuthGuard)
@@ -31,18 +26,6 @@ export class UsersController {
     return this.usersService.getAllUsers();
   }
 
-  @Roles('ADMIN')
-  @UseGuards(RolesGuard)
-  @ApiOperation({ summary: 'Role assignment' })
-  @ApiResponse({ status: 200, type: [User] })
-  @UseGuards(JwtAuthGuard)
-  @Post('/role')
-  addRole(@Body() dto: AddRoleDto) {
-    return this.usersService.addRole(dto);
-  }
-
-  @Roles('ADMIN')
-  @UseGuards(RolesGuard)
   @ApiOperation({ summary: 'Block users' })
   @ApiResponse({ status: 200, type: [User] })
   @UseGuards(JwtAuthGuard)

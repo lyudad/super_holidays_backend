@@ -1,14 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import {
-  Column,
-  DataType,
-  Model,
-  Table,
-  BelongsToMany,
-  HasMany,
-} from 'sequelize-typescript';
-import { Role } from 'models/roles.model';
-import { UserRoles } from 'modules/userRoles/user-role.model';
+import { Column, DataType, Model, Table, HasMany } from 'sequelize-typescript';
 import { Booking } from 'models/booking.model';
 
 interface UserCreationAttrs {
@@ -16,6 +7,12 @@ interface UserCreationAttrs {
   last_name: string;
   email: string;
   password: string;
+}
+
+enum Roles {
+  USER = 'user',
+  ADMIN = 'admin',
+  SUPER = 'super',
 }
 
 @Table({ tableName: 'users' })
@@ -79,8 +76,12 @@ export class User extends Model<User, UserCreationAttrs> {
   })
   isBlocked: boolean;
 
-  @BelongsToMany(() => Role, () => UserRoles)
-  roles: Role[];
+  @ApiProperty({ example: 'user', description: 'user role' })
+  @Column({
+    type: DataType.ENUM('user', 'admin', 'super'),
+    defaultValue: 'vacation',
+  })
+  roles: Roles;
 
   @HasMany(() => Booking)
   dates: Booking[];
