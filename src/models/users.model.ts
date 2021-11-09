@@ -24,7 +24,7 @@ export class User extends Model<User, UserCreationAttrs> {
     autoIncrement: true,
     primaryKey: true,
   })
-  user_id: number;
+  id: number;
 
   @ApiProperty({ example: 'Ivan', description: 'First name' })
   @Column({
@@ -79,7 +79,7 @@ export class User extends Model<User, UserCreationAttrs> {
   @ApiProperty({ example: 'user', description: 'user role' })
   @Column({
     type: DataType.ENUM('user', 'admin', 'super'),
-    defaultValue: 'vacation',
+    defaultValue: 'user',
   })
   roles: Roles;
 
