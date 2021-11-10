@@ -6,6 +6,7 @@ import {
   UseGuards,
   Delete,
   Param,
+  Patch,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './create-user.dto';
@@ -13,6 +14,7 @@ import { UsersService } from './users.service';
 import { User } from 'models/users.model';
 import { JwtAuthGuard } from 'modules/auth/jwt-auth.guard';
 import { BlockUserDto } from './block-user.dto';
+import { UpdateUserDto } from './update-user.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -41,6 +43,14 @@ export class UsersController {
   @Post('/block')
   blockUser(@Body() dto: BlockUserDto) {
     return this.usersService.blockUser(dto);
+  }
+
+  @ApiOperation({ summary: 'Update users' })
+  @ApiResponse({ status: 200, type: [User] })
+  @UseGuards(JwtAuthGuard)
+  @Patch('/:id')
+  updateUser(@Param('id') id: number, @Body() dto: UpdateUserDto) {
+    return this.usersService.updateUser(id, dto);
   }
 
   // @ApiOperation({ summary: 'Delete users' })
