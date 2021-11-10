@@ -17,3 +17,13 @@ export class CreateUserDto {
   @Length(4, 15, { message: 'min 4 max 15' })
   readonly password: string;
 }
+
+export class LoginUserDto {
+  @ApiProperty({ example: 'ivanov@gmail.com', description: 'email' })
+  @IsString({ message: 'Must be a string' })
+  @IsEmail({}, { message: 'Incorrect email' })
+  readonly email: string;
+  @ApiProperty({ example: 'asc.pdlc,pc', description: 'user password' })
+  @IsString({ message: 'Must be a string' })
+  readonly password: string;
+}

@@ -9,7 +9,7 @@ interface UserCreationAttrs {
   password: string;
 }
 
-enum Roles {
+export enum Roles {
   USER = 'user',
   ADMIN = 'admin',
   SUPER = 'super',
@@ -76,7 +76,7 @@ export class User extends Model<User, UserCreationAttrs> {
   })
   isBlocked: boolean;
 
-  @ApiProperty({ example: 'user', description: 'user role' })
+  @ApiProperty({ enum: ['admin', 'super', 'user'] })
   @Column({
     type: DataType.ENUM('user', 'admin', 'super'),
     defaultValue: 'user',

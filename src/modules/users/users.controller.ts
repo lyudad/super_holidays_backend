@@ -43,11 +43,11 @@ export class UsersController {
     return this.usersService.blockUser(dto);
   }
 
-  // @ApiOperation({ summary: 'Delete users' })
-  // @ApiResponse({ status: 200, type: [User] })
-  // @UseGuards(JwtAuthGuard)
-  // @Delete('/:id')
-  // deleteUser(@Param('id') id: number) {
-  //   return this.usersService.deleteUser(id);
-  // }
+  @ApiOperation({ summary: 'Delete users' })
+  @ApiResponse({ status: 200, type: [User] })
+  @UseGuards(JwtAuthGuard)
+  @Delete('/:id')
+  deleteUser(@Param('id') id: number) {
+    return this.usersService.deleteUser(id);
+  }
 }
