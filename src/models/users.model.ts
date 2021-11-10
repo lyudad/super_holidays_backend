@@ -76,7 +76,7 @@ export class User extends Model<User, UserCreationAttrs> {
   })
   isBlocked: boolean;
 
-  @ApiProperty({ enum: ['admin', 'super', 'user'] })
+  @ApiProperty({ example: 'user', description: 'user role' })
   @Column({
     type: DataType.ENUM('user', 'admin', 'super'),
     defaultValue: 'user',

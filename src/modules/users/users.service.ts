@@ -6,7 +6,7 @@ import { User } from 'models/users.model';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User) private userRepository: typeof User) {}
+  constructor(@InjectModel(User) private userRepository) {}
 
   async createUser(dto: CreateUserDto) {
     const user = await this.userRepository.create(dto);
@@ -45,6 +45,7 @@ export class UsersService {
     if (!user) {
       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
     }
+
     return this.userRepository.delete(user);
   }
 }
