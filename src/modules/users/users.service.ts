@@ -40,24 +40,16 @@ export class UsersService {
   }
 
   async updateUser(id: number, dto: UpdateUserDto) {
-    const user = await this.userRepository.findOne({
-      where: { id },
-    });
-    if (!user) {
-      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+    try {
+      const user = await this.userRepository.findOne({
+        where: { id },
+      });
+      if (!user) {
+        throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+      }
+      return this.userRepository.update(dto, { where: { id } });
+    } catch (error) {
+      console.log(error);
     }
-    return this.userRepository.update(dto, { where: { id } });
   }
-
-  // async deleteUser(id: number) {
-  // const user = await this.userRepository.findOne({
-  //   where: { id },
-  // });
-  //   if (!user) {
-  //     throw new HttpException('Not found', HttpStatus.NOT_FOUND);
-  //   }
-
-  //   console.log(user);
-  //   return this.userRepository.delete(user);
-  // }
 }
