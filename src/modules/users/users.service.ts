@@ -50,7 +50,8 @@ export class UsersService {
       console.log(e.message);
     }
   }
-    async deleteUser(id: number) {
+
+  async deleteUser(id: number) {
     try {
       const user = await this.userRepository.findOne({
         where: { id },
@@ -60,8 +61,6 @@ export class UsersService {
       console.log(e.message);
     }
   }
-}
-
 
   async updateUser(id: number, dto: UpdateUserDto) {
     try {
