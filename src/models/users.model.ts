@@ -9,7 +9,7 @@ interface UserCreationAttrs {
   password: string;
 }
 
-enum Roles {
+export enum Roles {
   USER = 'user',
   ADMIN = 'admin',
   SUPER = 'super',

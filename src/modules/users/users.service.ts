@@ -7,11 +7,15 @@ import { UpdateUserDto } from './update-user.dto';
 
 @Injectable()
 export class UsersService {
-  constructor(@InjectModel(User) private userRepository: typeof User) {}
+  constructor(@InjectModel(User) private userRepository) {}
 
   async createUser(dto: CreateUserDto) {
-    const user = await this.userRepository.create(dto);
-    return user;
+    try {
+      const user = await this.userRepository.create(dto);
+      return user;
+    } catch (e) {
+      console.log(e.message);
+    }
   }
 
   async getAllUsers() {
@@ -22,22 +26,42 @@ export class UsersService {
   }
 
   async getUserByEmail(email: string) {
-    const user = await this.userRepository.findOne({
-      where: { email },
-      include: { all: true },
-    });
-    return user;
+    try {
+      const user = await this.userRepository.findOne({
+        where: { email },
+        include: { all: true },
+      });
+      return user;
+    } catch (e) {
+      console.log(e.message);
+    }
   }
 
   async blockUser(dto: BlockUserDto) {
-    const user = await this.userRepository.findByPk(dto.userId);
-    if (!user) {
-      throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+    try {
+      const user = await this.userRepository.findByPk(dto.userId);
+      if (!user) {
+        throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+      }
+      user.isBlocked = true;
+      await user.save();
+      return user;
+    } catch (e) {
+      console.log(e.message);
     }
-    user.isBlocked = true;
-    await user.save();
-    return user;
   }
+    async deleteUser(id: number) {
+    try {
+      const user = await this.userRepository.findOne({
+        where: { id },
+      });
+      return this.userRepository.delete(user);
+    } catch (e) {
+      console.log(e.message);
+    }
+  }
+}
+
 
   async updateUser(id: number, dto: UpdateUserDto) {
     try {

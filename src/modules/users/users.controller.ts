@@ -45,11 +45,20 @@ export class UsersController {
     return this.usersService.blockUser(dto);
   }
 
+
+  @ApiOperation({ summary: 'Delete users' })
+  @ApiResponse({ status: 200, type: [User] })
+  @UseGuards(JwtAuthGuard)
+  @Delete('/:id')
+  deleteUser(@Param('id') id: number) {
+    return this.usersService.deleteUser(id);
+
   @ApiOperation({ summary: 'Update users' })
   @ApiResponse({ status: 200, type: [User] })
   @UseGuards(JwtAuthGuard)
   @Patch('/:id')
   updateUser(@Param('id') id: number, @Body() dto: UpdateUserDto) {
     return this.usersService.updateUser(id, dto);
+
   }
 }
