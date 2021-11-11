@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { BlockUserDto } from './block-user.dto';
 import { CreateUserDto } from './create-user.dto';
 import { User } from 'models/users.model';
+import { UpdateUserDto } from './update-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -49,8 +50,7 @@ export class UsersService {
       console.log(e.message);
     }
   }
-
-  async deleteUser(id: number) {
+    async deleteUser(id: number) {
     try {
       const user = await this.userRepository.findOne({
         where: { id },
@@ -58,6 +58,22 @@ export class UsersService {
       return this.userRepository.delete(user);
     } catch (e) {
       console.log(e.message);
+    }
+  }
+}
+
+
+  async updateUser(id: number, dto: UpdateUserDto) {
+    try {
+      const user = await this.userRepository.findOne({
+        where: { id },
+      });
+      if (!user) {
+        throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+      }
+      return this.userRepository.update(dto, { where: { id } });
+    } catch (error) {
+      console.log(error);
     }
   }
 }
