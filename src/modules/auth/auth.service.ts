@@ -18,50 +18,69 @@ export class AuthService {
   ) {}
 
   async login(userDto: LoginUserDto) {
-    const user = await this.validateUser(userDto);
-    const token = await this.generateToken(user);
-    const result = {
-      email: user.email,
-      name: `${user.first_name}  ${user.last_name}`,
-      role: user.roles,
-    };
-    return {
-      token,
-      result,
-    };
+    try {
+      const user = await this.validateUser(userDto);
+      const token = await this.generateToken(user);
+      const result = {
+        email: user.email,
+        name: `${user.first_name}  ${user.last_name}`,
+        role: user.roles,
+      };
+      return {
+        token,
+        result,
+      };
+    } catch (e) {
+      console.log(e.message);
+    }
   }
   async registration(userDto: CreateUserDto) {
-    const candidate = await this.userService.getUserByEmail(userDto.email);
-    if (candidate) {
-      throw new HttpException(
-        'User with the same email already exists',
-        HttpStatus.BAD_REQUEST,
-      );
+    try {
+      const candidate = await this.userService.getUserByEmail(userDto.email);
+      if (candidate) {
+        throw new HttpException(
+          'User with the same email already exists',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      const hasPassword = await bcrypt.hash(userDto.password, 5);
+      const user = await this.userService.createUser({
+        ...userDto,
+        password: hasPassword,
+      });
+      return user;
+    } catch (e) {
+      console.log(e.message);
     }
-    const hasPassword = await bcrypt.hash(userDto.password, 5);
-    const user = await this.userService.createUser({
-      ...userDto,
-      password: hasPassword,
-    });
-    return user;
   }
 
   private async generateToken(user: User) {
-    const payload = { email: user.email, id: user.id, roles: user.roles };
-    return {
-      token: this.jwtService.sign(payload),
-    };
+    try {
+      const payload = { email: user.email, id: user.id, roles: user.roles };
+      return {
+        token: this.jwtService.sign(payload),
+      };
+    } catch (e) {
+      console.log(e.message);
+    }
   }
 
-  private async validateUser(userDto: CreateUserDto | LoginUserDto) {
-    const user = await this.userService.getUserByEmail(userDto.email);
-    const passwordEquals = await bcrypt.compare(
-      userDto.password,
-      user.password,
-    );
-    if (user && passwordEquals) {
-      return user;
+  private async validateUser(userDto: LoginUserDto) {
+    try {
+      const user = await this.userService.getUserByEmail(userDto.email);
+      const passwordEquals = await bcrypt.compare(
+        userDto.password,
+        user.password,
+      );
+      if (user && passwordEquals) {
+        return user;
+      }
+    } catch (e) {
+      console.log(e.message);
+
+      throw new UnauthorizedException({
+        message: 'Incorrect login or password',
+      });
     }
-    throw new UnauthorizedException({ message: 'Incorrect login or password' });
   }
 }
