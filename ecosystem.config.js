@@ -3,7 +3,7 @@ module.exports = {
     name: 'app',
     script: 'yarn',
     args: 'start:dev',
-    // watch: true,
+    interpreter: "/bin/bash",
     env: {
       PORT: 8080,
       DB_HOST: 'localhost',
