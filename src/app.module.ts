@@ -14,11 +14,11 @@ import { BookingModule } from './modules/booking/booking.module';
     }),
     SequelizeModule.forRoot({
       dialect: 'mysql',
-      host: process.env.HOST,
-      port: Number(process.env.PORT),
-      username: process.env.USER,
-      password: process.env.PASSWORD,
-      database: process.env.DB,
+      host: process.env.DB_HOST,
+      port: Number(process.env.DB_PORT),
+      username: process.env.DB_USER,
+      password: '',
+      database: process.env.DB_NAME,
       models: [User, Booking],
       autoLoadModels: true,
     }),
@@ -29,4 +29,4 @@ import { BookingModule } from './modules/booking/booking.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }
