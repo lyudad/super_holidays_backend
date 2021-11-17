@@ -17,7 +17,11 @@ import { BookingModule } from './modules/booking/booking.module';
       host: process.env.DB_HOST,
       port: Number(process.env.DB_PORT),
       username: process.env.DB_USER,
+<<<<<<< HEAD
       password: process.env.DB_PASSWORD,
+=======
+      password: '',
+>>>>>>> dev
       database: process.env.DB_NAME,
       models: [User, Booking],
       autoLoadModels: true,
@@ -29,4 +33,4 @@ import { BookingModule } from './modules/booking/booking.module';
   controllers: [],
   providers: [],
 })
-export class AppModule {}
+export class AppModule { }
