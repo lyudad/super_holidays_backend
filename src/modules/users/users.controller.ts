@@ -22,7 +22,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @ApiOperation({ summary: 'Create user' })
-  @ApiResponse({ status: 200, type: User })
+  @ApiResponse({ status: 201, type: User })
   @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() userDto: CreateUserDto) {
@@ -46,7 +46,7 @@ export class UsersController {
   }
 
   @ApiOperation({ summary: 'Delete users' })
-  @ApiResponse({ status: 200, type: [User] })
+  @ApiResponse({ status: 204 })
   @UseGuards(JwtAuthGuard)
   @Delete('/:id')
   deleteUser(@Param('id') id: number) {

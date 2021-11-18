@@ -69,7 +69,7 @@ export class User extends Model<User, UserCreationAttrs> {
   })
   total_vacations: number;
 
-  @ApiProperty({ example: 'true', description: 'user is blocked' })
+  @ApiProperty({ example: 'false', description: 'user is blocked' })
   @Column({
     type: DataType.BOOLEAN,
     defaultValue: false,
