@@ -12,7 +12,6 @@ import { Booking } from 'models/booking.model';
     forwardRef(() => AuthModule),
   ],
   exports: [UsersService],
-
   controllers: [UsersController],
   providers: [UsersService],
 })
