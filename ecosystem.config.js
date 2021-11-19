@@ -1,4 +1,4 @@
-/* eslint-disable prettier/prettier */
+
 module.exports = {
   apps: [
     {
@@ -18,3 +18,4 @@ module.exports = {
     },
   ],
 };
+/* eslint-disable prettier/prettier */
