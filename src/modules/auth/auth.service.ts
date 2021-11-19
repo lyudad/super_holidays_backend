@@ -16,21 +16,20 @@ export class AuthService {
     private userService: UsersService,
     private jwtService: JwtService,
   ) {}
-
   async login(userDto: LoginUserDto) {
     try {
-      const user = await this.validateUser(userDto);
-      const token = await this.generateToken(user);
-      const result = {
-        email: user.email,
-        name: `${user.first_name}  ${user.last_name}`,
-        role: user.roles,
+      const User = await this.validateUser(userDto);
+      const token = await this.generateToken(User);
+      const user = {
+        email: User.email,
+        name: `${User.first_name}  ${User.last_name}`,
+        role: User.roles,
         vacation: User.total_vacations,
         sick_leaves: User.total_sick_leaves,
       };
       return {
         token,
-        result,
+        user,
       };
     } catch (e) {
       console.log(e.message);
