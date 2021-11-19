@@ -25,6 +25,8 @@ export class AuthService {
         email: user.email,
         name: `${user.first_name}  ${user.last_name}`,
         role: user.roles,
+        vacation: User.total_vacations,
+        sick_leaves: User.total_sick_leaves,
       };
       return {
         token,
