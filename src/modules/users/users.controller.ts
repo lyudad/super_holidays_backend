@@ -13,6 +13,7 @@ import { CreateUserDto } from './create-user.dto';
 import { UsersService } from './users.service';
 import { User } from 'models/users.model';
 import { JwtAuthGuard } from 'modules/auth/jwt-auth.guard';
+import { JwtStrategy } from 'modules/auth/jwt.strategy';
 import { BlockUserDto } from './block-user.dto';
 import { UpdateUserDto } from './update-user.dto';
 

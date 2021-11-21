@@ -5,7 +5,6 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { InjectModel } from '@nestjs/sequelize';
 import { CreateUserDto, LoginUserDto } from 'modules/users/create-user.dto';
 import { UsersService } from 'modules/users/users.service';
 import { User } from 'models/users.model';
@@ -15,8 +14,6 @@ import * as bcrypt from 'bcrypt';
 @Injectable()
 export class AuthService {
   constructor(
-    @InjectModel(Session)
-    @InjectModel(User)
     private userService: UsersService,
     private jwtService: JwtService,
   ) {}
@@ -29,54 +26,41 @@ export class AuthService {
         });
         const accessToken = this.jwtService.sign(
           { uid: LoginUser.id, sid: newSession.id },
-          process.env.SECRET_KEY,
           {
+            secret: process.env.SECRET_KEY,
             expiresIn: '1h',
           },
         );
         const refreshToken = this.jwtService.sign(
           { uid: LoginUser.id, sid: newSession.id },
-          process.env.SECRET_KEY,
           {
+            secret: process.env.SECRET_KEY,
             expiresIn: '2d',
           },
         );
-        return UserSchema.findOne({ email }).exec((err, data) => {
-          if (err) {
-            next(err);
-          }
-          return res.status(httpCode.OK).send({
-            status: 'success',
-            code: httpCode.OK,
-            data: {
-              headers: {
-                accessToken,
-                refreshToken,
-                sid: newSession._id,
-              },
-              email: data.email,
-              name: data.name,
-              picture: data.picture,
-              id: data._id,
-              createdAt: data.createdAt,
-            },
+        return await this.userService
+          .getUserByEmail(LoginUser.email)
+          .then(() => {
+            const data = {
+              accessToken,
+              refreshToken,
+              sid: newSession.id,
+            };
+            const user = {
+              email: LoginUser.email,
+              name: `${LoginUser.first_name}  ${LoginUser.last_name}`,
+              role: LoginUser.roles,
+            };
+            return {
+              data,
+              user,
+            };
           });
-        });
       } catch (e) {
-        console.log(e);
+        throw new UnauthorizedException(e);
       }
-      const token = await this.generateToken(User);
-      const user = {
-        email: User.email,
-        name: `${User.first_name}  ${User.last_name}`,
-        role: User.roles,
-      };
-      return {
-        token,
-        user,
-      };
     } catch (e) {
-      console.log(e.message);
+      throw new UnauthorizedException(e);
     }
   }
   async registration(userDto: CreateUserDto) {
