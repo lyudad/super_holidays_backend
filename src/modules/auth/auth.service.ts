@@ -1,9 +1,4 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto, LoginUserDto } from 'modules/users/create-user.dto';
 import { UsersService } from 'modules/users/users.service';
@@ -36,7 +31,7 @@ export class AuthService {
       });
       return user;
     } catch (e) {
-      console.log(e.message);
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
   }
   async login(userDto: LoginUserDto) {
@@ -79,10 +74,10 @@ export class AuthService {
             };
           });
       } catch (e) {
-        throw new UnauthorizedException(e);
+        throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
       }
     } catch (e) {
-      throw new UnauthorizedException(e);
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
   }
   async logout({ request, response }) {
@@ -95,7 +90,7 @@ export class AuthService {
       request.session = null;
       return response.end();
     } catch (e) {
-      console.log(e.message);
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
   }
   async refresh(request) {
@@ -137,11 +132,7 @@ export class AuthService {
         return user;
       }
     } catch (e) {
-      console.log(e.message);
-
-      throw new UnauthorizedException({
-        message: 'Incorrect login or password',
-      });
+      throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
   }
 }
