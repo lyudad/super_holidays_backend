@@ -7,11 +7,16 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { User } from 'models/users.model';
 import { Session } from 'models/session.model';
+import { InjectModel } from '@nestjs/sequelize';
 // import { Observable } from 'rxjs';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    @InjectModel(User) private userRepository,
+    @InjectModel(Session) private sessionRepository,
+    private jwtService: JwtService,
+  ) {}
 
   async canActivate(context: ExecutionContext) {
     const req = context.switchToHttp().getRequest();
@@ -31,8 +36,13 @@ export class JwtAuthGuard implements CanActivate {
       } catch (err) {
         console.log(err.message);
       }
-      const user = await User.findOne(payload.uid);
-      const session = await Session.findOne(payload.sid);
+      const user = await this.userRepository.findOne({
+        where: { id: payload.uid },
+      });
+      const session = await this.sessionRepository.findOne({
+        where: { id: payload.sid },
+      });
+      console.log(payload.sid);
       if (!user) {
         throw new UnauthorizedException({ message: 'Unauthorized' });
       }

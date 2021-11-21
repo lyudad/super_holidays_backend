@@ -1,3 +1,4 @@
+import { request } from 'http';
 import {
   HttpException,
   HttpStatus,
@@ -19,7 +20,7 @@ export class AuthService {
     private userService: UsersService,
     private jwtService: JwtService,
   ) {}
-  async logout(request) {
+  async logout({ request, response }) {
     try {
       const session = request.session;
       await this.sessionRepository.destroy({
@@ -27,6 +28,7 @@ export class AuthService {
       });
       request.user = null;
       request.session = null;
+      return response.end();
     } catch (e) {
       console.log(e.message);
     }

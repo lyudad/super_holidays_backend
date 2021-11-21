@@ -1,5 +1,5 @@
-import { Body, Controller, Post, UseGuards, Req } from '@nestjs/common';
-import { Request } from 'express';
+import { Body, Controller, Post, UseGuards, Req, Res } from '@nestjs/common';
+import { Request, Response } from 'express';
 import { ApiTags } from '@nestjs/swagger';
 import { CreateUserDto, LoginUserDto } from 'modules/users/create-user.dto';
 import { AuthService } from './auth.service';
@@ -17,8 +17,8 @@ export class AuthController {
 
   @Post('/logout')
   @UseGuards(JwtAuthGuard)
-  logout(@Req() request: Request) {
-    return this.authService.logout(request);
+  logout(@Req() request: Request, @Res() response: Response) {
+    return this.authService.logout({ request, response });
   }
 
   @Post('/registration')

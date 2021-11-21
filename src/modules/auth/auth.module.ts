@@ -8,10 +8,11 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { Session } from '../../models/session.model';
+import { User } from '../../models/users.model';
 
 @Module({
   imports: [
-    SequelizeModule.forFeature([Session]),
+    SequelizeModule.forFeature([Session, User]),
     forwardRef(() => UsersModule),
     PassportModule.register({ defaultStrategy: 'jwt' }),
     JwtModule.register({
