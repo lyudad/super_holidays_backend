@@ -1,12 +1,4 @@
-import {
-  Body,
-  Controller,
-  Post,
-  Get,
-  UseGuards,
-  Param,
-  Patch,
-} from '@nestjs/common';
+import { Body, Controller, Post, Param, Patch } from '@nestjs/common';
 import { Booking } from 'models/booking.model';
 import { CreateBookingDto } from './create-booking.dto';
 import { UpdateBookingDto } from './update-booking.dto';
@@ -23,13 +15,6 @@ export class BookingController {
   @Post()
   create(@Body() dto: CreateBookingDto) {
     return this.bookingService.create(dto);
-  }
-
-  @ApiOperation({ summary: 'Get all booking' })
-  @ApiResponse({ status: 200, type: [Booking] })
-  @Get()
-  getAll() {
-    return this.bookingService.getAllBooking();
   }
 
   @ApiOperation({ summary: 'Update booking' })

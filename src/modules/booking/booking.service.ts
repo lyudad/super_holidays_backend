@@ -12,18 +12,11 @@ export class BookingService {
 
   async create(dto: CreateBookingDto) {
     try {
-      const booking = await this.bookingRepository.create({ ...dto });
+      const booking = await this.bookingRepository.create(dto);
       return booking;
     } catch (e) {
       console.log(e.message);
     }
-  }
-
-  async getAllBooking() {
-    const booking = await this.bookingRepository.findAll({
-      include: { all: true },
-    });
-    return booking;
   }
 
   async updateBooking(id: number, dto: UpdateBookingDto) {
