@@ -1,4 +1,3 @@
-import { request } from 'http';
 import {
   HttpException,
   HttpStatus,
@@ -8,8 +7,8 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { CreateUserDto, LoginUserDto } from 'modules/users/create-user.dto';
 import { UsersService } from 'modules/users/users.service';
-import { User } from 'models/users.model';
 import { Session } from 'models/session.model';
+import { User } from 'models/users.model';
 import * as bcrypt from 'bcrypt';
 import { InjectModel } from '@nestjs/sequelize';
 
@@ -17,18 +16,25 @@ import { InjectModel } from '@nestjs/sequelize';
 export class AuthService {
   constructor(
     @InjectModel(Session) private sessionRepository,
+    @InjectModel(User) private userRepository,
     private userService: UsersService,
     private jwtService: JwtService,
   ) {}
-  async logout({ request, response }) {
+  async registration(userDto: CreateUserDto) {
     try {
-      const session = request.session;
-      await this.sessionRepository.destroy({
-        where: { id: session.id },
+      const candidate = await this.userService.getUserByEmail(userDto.email);
+      if (candidate) {
+        throw new HttpException(
+          'User with the same email already exists',
+          HttpStatus.BAD_REQUEST,
+        );
+      }
+      const hasPassword = await bcrypt.hash(userDto.password, 5);
+      const user = await this.userService.createUser({
+        ...userDto,
+        password: hasPassword,
       });
-      request.user = null;
-      request.session = null;
-      return response.end();
+      return user;
     } catch (e) {
       console.log(e.message);
     }
@@ -79,37 +85,47 @@ export class AuthService {
       throw new UnauthorizedException(e);
     }
   }
-  async registration(userDto: CreateUserDto) {
+  async logout({ request, response }) {
     try {
-      const candidate = await this.userService.getUserByEmail(userDto.email);
-      if (candidate) {
-        throw new HttpException(
-          'User with the same email already exists',
-          HttpStatus.BAD_REQUEST,
-        );
-      }
-      const hasPassword = await bcrypt.hash(userDto.password, 5);
-      const user = await this.userService.createUser({
-        ...userDto,
-        password: hasPassword,
+      const session = request.session;
+      await this.sessionRepository.destroy({
+        where: { id: session.id },
       });
-      return user;
+      request.user = null;
+      request.session = null;
+      return response.end();
     } catch (e) {
       console.log(e.message);
     }
   }
-
-  private async generateToken(user: User) {
+  async refresh(request) {
     try {
-      const payload = { email: user.email, id: user.id, roles: user.roles };
+      const session = request.session;
+      await this.sessionRepository.destroy({
+        where: { id: session.id },
+      });
+      const newSession = await this.sessionRepository.create({
+        uid: request.user.id,
+      });
+      const accessToken = this.jwtService.sign(
+        { uid: request.user.id, sid: newSession.id },
+        {
+          secret: process.env.SECRET_KEY,
+          expiresIn: '1h',
+        },
+      );
+      const refreshToken = this.jwtService.sign(
+        { uid: request.user.id, sid: newSession.id },
+
+        { secret: process.env.SECRET_KEY, expiresIn: '2d' },
+      );
       return {
-        token: this.jwtService.sign(payload),
+        data: { accessToken, refreshToken, sid: newSession.id },
       };
     } catch (e) {
       console.log(e.message);
     }
   }
-
   private async validateUser(userDto: LoginUserDto) {
     try {
       const user = await this.userService.getUserByEmail(userDto.email);

@@ -20,6 +20,11 @@ export class AuthController {
   logout(@Req() request: Request, @Res() response: Response) {
     return this.authService.logout({ request, response });
   }
+  @Post('/refresh')
+  @UseGuards(JwtAuthGuard)
+  refresh(@Req() request: Request) {
+    return this.authService.refresh(request);
+  }
 
   @Post('/registration')
   registration(@Body() userDto: CreateUserDto) {
