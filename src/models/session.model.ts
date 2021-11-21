@@ -12,7 +12,7 @@ export class Session extends Model<SessionCreate> {
     autoIncrement: true,
     primaryKey: true,
   })
-  id: number;
+  id: string;
   @Column({
     type: DataType.STRING,
     allowNull: false,

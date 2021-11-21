@@ -10,18 +10,32 @@ import { UsersService } from 'modules/users/users.service';
 import { User } from 'models/users.model';
 import { Session } from 'models/session.model';
 import * as bcrypt from 'bcrypt';
+import { InjectModel } from '@nestjs/sequelize';
 
 @Injectable()
 export class AuthService {
   constructor(
+    @InjectModel(Session) private sessionRepository,
     private userService: UsersService,
     private jwtService: JwtService,
   ) {}
+  async logout(request) {
+    try {
+      const session = request.session;
+      await this.sessionRepository.destroy({
+        where: { id: session.id },
+      });
+      request.user = null;
+      request.session = null;
+    } catch (e) {
+      console.log(e.message);
+    }
+  }
   async login(userDto: LoginUserDto) {
     try {
       const LoginUser = await this.validateUser(userDto);
       try {
-        const newSession = await Session.create({
+        const newSession = await this.sessionRepository.create({
           uid: LoginUser.id,
         });
         const accessToken = this.jwtService.sign(
