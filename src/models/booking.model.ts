@@ -10,20 +10,20 @@ import {
 import { User } from 'models/users.model';
 
 interface BookingCreationAttrs {
-  start_day: string;
-  end_day: string;
+  start_day: Date;
+  end_day: Date;
   type: string;
   status: string;
   userId: number;
 }
 
-enum Status {
+export enum Status {
   PENDING = 'pending',
   APPROVED = 'approved',
   REJECTED = 'rejected',
 }
 
-enum VacationType {
+export enum VacationType {
   SICK_LEAVE = 'sick_leave',
   VACATION = 'vacation',
 }
@@ -61,7 +61,7 @@ export class Booking extends Model<Booking, BookingCreationAttrs> {
   })
   type: VacationType;
 
-  @ApiProperty({ example: 'vacation', description: 'vacation type' })
+  @ApiProperty({ example: 'pending', description: 'vacation status' })
   @Column({
     type: DataType.ENUM('pending', 'approved', 'rejected'),
     defaultValue: 'pending',

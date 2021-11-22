@@ -1,13 +1,26 @@
-import { Body, Controller, Post } from '@nestjs/common';
-import { BookingDto } from './booking.dto';
+import { Body, Controller, Post, Param, Patch } from '@nestjs/common';
+import { Booking } from 'models/booking.model';
+import { CreateBookingDto } from './create-booking.dto';
+import { UpdateBookingDto } from './update-booking.dto';
 import { BookingService } from './booking.service';
+import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 
+@ApiTags('Booking')
 @Controller('booking')
 export class BookingController {
   constructor(private bookingService: BookingService) {}
 
+  @ApiOperation({ summary: 'Create booking' })
+  @ApiResponse({ status: 200, type: Booking })
   @Post()
-  createBooking(@Body() dto: BookingDto) {
+  create(@Body() dto: CreateBookingDto) {
     return this.bookingService.create(dto);
+  }
+
+  @ApiOperation({ summary: 'Update booking' })
+  @ApiResponse({ status: 200, type: [Booking] })
+  @Patch('/:id')
+  updateBooking(@Param('id') id: number, @Body() dto: UpdateBookingDto) {
+    return this.bookingService.updateBooking(id, dto);
   }
 }
