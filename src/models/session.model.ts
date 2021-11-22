@@ -4,7 +4,7 @@ interface SessionCreate {
   uid: string;
 }
 
-@Table({ tableName: 'session' })
+@Table({ tableName: 'sessions' })
 export class Session extends Model<SessionCreate> {
   @Column({
     type: DataType.INTEGER,
