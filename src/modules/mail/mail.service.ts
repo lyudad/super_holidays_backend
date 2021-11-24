@@ -14,7 +14,7 @@ export class MailService {
       template: './email-template', // `.hbs` extension is appended automatically
       context: {
         // ✏️ filling curly brackets with content
-        name: 'hello',
+        name: user.email,
         email: user.email,
         password: user.password,
       },
