@@ -6,6 +6,7 @@ import { UsersModule } from 'modules/users/users.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { Booking } from 'models/booking.model';
 import { BookingModule } from './modules/booking/booking.module';
+import { MailModule } from './modules/mail/mail.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { BookingModule } from './modules/booking/booking.module';
     UsersModule,
     AuthModule,
     BookingModule,
+    MailModule,
   ],
   controllers: [],
   providers: [],
