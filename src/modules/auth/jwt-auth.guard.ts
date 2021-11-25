@@ -5,26 +5,50 @@ import {
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
-import { Observable } from 'rxjs';
+import { User } from 'models/users.model';
+import { Session } from 'models/session.model';
+import { InjectModel } from '@nestjs/sequelize';
 
 @Injectable()
 export class JwtAuthGuard implements CanActivate {
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    @InjectModel(User) private userRepository,
+    @InjectModel(Session) private sessionRepository,
+    private jwtService: JwtService,
+  ) {}
 
-  canActivate(
-    context: ExecutionContext,
-  ): boolean | Promise<boolean> | Observable<boolean> {
+  async canActivate(context: ExecutionContext) {
     const req = context.switchToHttp().getRequest();
     try {
       const authHeader = req.headers.authorization;
       const bearer = authHeader.split(' ')[0];
       const token = authHeader.split(' ')[1];
-
       if (bearer !== 'Bearer' || !token) {
         throw new UnauthorizedException({ message: 'Unauthorized' });
       }
-      const user = this.jwtService.verify(token);
+      let payload;
+      try {
+        payload = this.jwtService.verify(token, {
+          secret: process.env.SECRET_KEY,
+        });
+      } catch (err) {
+        console.log(err.message);
+      }
+      const user = await this.userRepository.findOne({
+        where: { id: payload.uid },
+      });
+      const session = await this.sessionRepository.findOne({
+        where: { id: payload.sid },
+      });
+      if (!user) {
+        throw new UnauthorizedException({ message: 'Unauthorized' });
+      }
+      if (!session) {
+        throw new UnauthorizedException({ message: 'Unauthorized' });
+      }
       req.user = user;
+      req.session = session;
+      req.payload = payload;
       return true;
     } catch (error) {
       throw new UnauthorizedException({ message: 'Unauthorized' });
