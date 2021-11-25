@@ -1,7 +1,7 @@
 import { Body, Controller, Post, UseGuards } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { MailService } from './mail.service';
-// import { JwtAuthGuard } from 'modules/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'modules/auth/jwt-auth.guard';
 import { LoginUserDto } from '../users/create-user.dto';
 
 @ApiTags('Mail')
@@ -11,7 +11,7 @@ export class MailController {
 
   @ApiOperation({ summary: 'Create user' })
   @ApiResponse({ status: 201 })
-  //   @UseGuards(JwtAuthGuard)
+  @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() userDto: LoginUserDto) {
     return this.mailService.sendUserInformation(userDto);

@@ -1,12 +1,18 @@
+import { forwardRef, Module } from '@nestjs/common';
 import { MailerModule } from '@nestjs-modules/mailer';
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
-import { Module } from '@nestjs/common';
 import { MailService } from './mail.service';
 import { MailController } from './mail.controller';
 import { join } from 'path';
+import { AuthModule } from 'modules/auth/auth.module';
+import { User } from 'models/users.model';
+import { SequelizeModule } from '@nestjs/sequelize';
+import { Session } from 'models/session.model';
 
 @Module({
   imports: [
+    SequelizeModule.forFeature([User, Session]),
+    forwardRef(() => AuthModule),
     MailerModule.forRoot({
       transport: {
         host: process.env.HOST_EMAIL,

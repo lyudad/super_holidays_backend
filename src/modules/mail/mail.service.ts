@@ -9,11 +9,10 @@ export class MailService {
   async sendUserInformation(user: LoginUserDto) {
     await this.mailerService.sendMail({
       to: user.email,
-      from: '"Support Team" <alexeysystem@meta.ua>', // override default from
+      from: '"Support Team" <alexeysystem@meta.ua>',
       subject: 'Welcome to ZenBit! This is your access',
-      template: './email-template', // `.hbs` extension is appended automatically
+      template: './email-template',
       context: {
-        // ✏️ filling curly brackets with content
         name: user.email,
         email: user.email,
         password: user.password,

@@ -18,6 +18,13 @@ export class UsersService {
     }
   }
 
+  async getCurrentUser(res) {
+    const user = await this.userRepository.findOne({
+      where: { id: res.user.id },
+    });
+    return user;
+  }
+
   async getAllUsers() {
     const users = await this.userRepository.findAll({
       include: { all: true },

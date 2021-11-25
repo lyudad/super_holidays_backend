@@ -7,6 +7,7 @@ import {
   Delete,
   Param,
   Patch,
+  Req,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './create-user.dto';
@@ -15,6 +16,7 @@ import { User } from 'models/users.model';
 import { JwtAuthGuard } from 'modules/auth/jwt-auth.guard';
 import { BlockUserDto } from './block-user.dto';
 import { UpdateUserDto } from './update-user.dto';
+import { Request } from 'express';
 
 @ApiTags('Users')
 @Controller('users')
@@ -27,6 +29,14 @@ export class UsersController {
   @Post()
   create(@Body() userDto: CreateUserDto) {
     return this.usersService.createUser(userDto);
+  }
+
+  @ApiOperation({ summary: 'Get current users' })
+  @ApiResponse({ status: 200, type: [User] })
+  @UseGuards(JwtAuthGuard)
+  @Get('/current')
+  getCurrent(@Req() request: Request) {
+    return this.usersService.getCurrentUser(request);
   }
 
   @ApiOperation({ summary: 'Get all users' })

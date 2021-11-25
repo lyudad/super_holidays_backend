@@ -1,9 +1,17 @@
-import { Body, Controller, Post, Param, Patch } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Post,
+  Param,
+  Patch,
+  UseGuards,
+} from '@nestjs/common';
 import { Booking } from 'models/booking.model';
 import { CreateBookingDto } from './create-booking.dto';
 import { UpdateBookingDto } from './update-booking.dto';
 import { BookingService } from './booking.service';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { JwtAuthGuard } from 'modules/auth/jwt-auth.guard';
 
 @ApiTags('Booking')
 @Controller('booking')
@@ -12,6 +20,7 @@ export class BookingController {
 
   @ApiOperation({ summary: 'Create booking' })
   @ApiResponse({ status: 200, type: Booking })
+  @UseGuards(JwtAuthGuard)
   @Post()
   create(@Body() dto: CreateBookingDto) {
     return this.bookingService.create(dto);
@@ -19,6 +28,7 @@ export class BookingController {
 
   @ApiOperation({ summary: 'Update booking' })
   @ApiResponse({ status: 200, type: [Booking] })
+  @UseGuards(JwtAuthGuard)
   @Patch('/:id')
   updateBooking(@Param('id') id: number, @Body() dto: UpdateBookingDto) {
     return this.bookingService.updateBooking(id, dto);

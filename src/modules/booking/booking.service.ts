@@ -27,7 +27,17 @@ export class BookingService {
       if (!booking) {
         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
       }
-      return this.bookingRepository.update(dto, { where: { id } });
+      return await this.bookingRepository.update(dto, { where: { id } });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+  async getAllBookings() {
+    try {
+      const bookings = await this.bookingRepository.findAll({
+        include: { all: true },
+      });
+      return bookings;
     } catch (error) {
       console.log(error);
     }
