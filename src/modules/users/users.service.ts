@@ -4,6 +4,7 @@ import { BlockUserDto } from './block-user.dto';
 import { CreateUserDto } from './create-user.dto';
 import { User } from 'models/users.model';
 import { UpdateUserDto } from './update-user.dto';
+import { RoleUserDto } from './role-user.dto';
 
 @Injectable()
 export class UsersService {
@@ -76,6 +77,21 @@ export class UsersService {
       });
     } catch (error) {
       console.log(error);
+    }
+  }
+
+  async updateRoleUser(id: number, dto: RoleUserDto) {
+    try {
+      const user = await this.userRepository.findOne({ where: { id } });
+      if (!user) {
+        throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+      }
+      await this.userRepository.update(dto, { where: { id } });
+      return await this.userRepository.findOne({
+        where: { id },
+      });
+    } catch (e) {
+      console.log(e.message);
     }
   }
 }
