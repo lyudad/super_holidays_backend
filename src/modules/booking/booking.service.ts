@@ -27,7 +27,10 @@ export class BookingService {
       if (!booking) {
         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
       }
-      return this.bookingRepository.update(dto, { where: { id } });
+      await this.bookingRepository.update(dto, { where: { id } });
+      return await this.bookingRepository.findOne({
+        where: { id },
+      });
     } catch (error) {
       console.log(error);
     }

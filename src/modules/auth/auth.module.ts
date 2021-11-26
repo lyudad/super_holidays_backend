@@ -7,8 +7,8 @@ import { UsersModule } from 'modules/users/users.module';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
-import { Session } from '../../models/session.model';
-import { User } from '../../models/users.model';
+import { Session } from 'models/session.model';
+import { User } from 'models/users.model';
 
 @Module({
   imports: [
