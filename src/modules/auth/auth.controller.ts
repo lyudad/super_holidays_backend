@@ -18,6 +18,7 @@ export class AuthController {
   login(@Body() user: LoginUserDto) {
     return this.authService.login(user);
   }
+
   @ApiOperation({ summary: 'Logout user' })
   @ApiResponse({ status: 201 })
   @Post('/logout')
@@ -25,6 +26,7 @@ export class AuthController {
   logout(@Req() request: Request, @Res() response: Response) {
     return this.authService.logout({ request, response });
   }
+
   @ApiOperation({ summary: 'Refresh token user' })
   @ApiResponse({ status: 201, type: RefreshDto })
   @Post('/refresh')

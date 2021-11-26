@@ -70,7 +70,10 @@ export class UsersService {
       if (!user) {
         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
       }
-      return this.userRepository.update(dto, { where: { id } });
+      await this.userRepository.update(dto, { where: { id } });
+      return await this.userRepository.findOne({
+        where: { id },
+      });
     } catch (error) {
       console.log(error);
     }
