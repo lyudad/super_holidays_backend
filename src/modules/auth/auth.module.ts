@@ -9,6 +9,7 @@ import { AuthService } from './auth.service';
 import { JwtStrategy } from './jwt.strategy';
 import { Session } from 'models/session.model';
 import { User } from 'models/users.model';
+import { RolesGuard } from './roles.guard';
 
 @Module({
   imports: [
@@ -22,6 +23,6 @@ import { User } from 'models/users.model';
   ],
   exports: [AuthService, JwtModule, PassportModule],
   controllers: [AuthController],
-  providers: [AuthService, JwtStrategy],
+  providers: [AuthService, JwtStrategy, RolesGuard],
 })
 export class AuthModule {}

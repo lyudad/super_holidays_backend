@@ -15,6 +15,7 @@ export class AuthService {
     private userService: UsersService,
     private jwtService: JwtService,
   ) {}
+
   async registration(userDto: CreateUserDto) {
     try {
       const candidate = await this.userService.getUserByEmail(userDto.email);
@@ -34,6 +35,7 @@ export class AuthService {
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
   }
+
   async login(userDto: LoginUserDto) {
     try {
       const LoginUser = await this.validateUser(userDto);
@@ -80,6 +82,7 @@ export class AuthService {
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
   }
+
   async logout({ request, response }) {
     try {
       const session = request.session;
@@ -93,6 +96,7 @@ export class AuthService {
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
   }
+
   async refresh(request) {
     try {
       const session = request.session;
@@ -121,6 +125,7 @@ export class AuthService {
       console.log(e.message);
     }
   }
+
   private async validateUser(userDto: LoginUserDto) {
     try {
       const user = await this.userService.getUserByEmail(userDto.email);
