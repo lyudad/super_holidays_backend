@@ -73,7 +73,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Update role' })
   @ApiResponse({ status: 200, type: [User] })
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Patch('/:id')
+  @Patch('/:id/roles')
   @hasRoles(Role.SUPER)
   updateRole(@Param('id') id: number, @Body() dto: RoleUserDto) {
     return this.usersService.updateRoleUser(id, dto);
