@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { CreateBookingDto } from './create-booking.dto';
 import { UpdateBookingDto } from './update-booking.dto';
 import { Booking } from 'models/booking.model';
+import { UpdateStatusDto } from './update-status.dto';
 
 @Injectable()
 export class BookingService {
@@ -27,17 +28,27 @@ export class BookingService {
       if (!booking) {
         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
       }
-      return await this.bookingRepository.update(dto, { where: { id } });
+      await this.bookingRepository.update(dto, { where: { id } });
+      return await this.bookingRepository.findOne({
+        where: { id },
+      });
     } catch (error) {
       console.log(error);
     }
   }
-  async getAllBookings() {
+
+  async updateStatus(id: number, dto: UpdateStatusDto) {
     try {
-      const bookings = await this.bookingRepository.findAll({
-        include: { all: true },
+      const user = await this.bookingRepository.findOne({
+        where: { id },
       });
-      return bookings;
+      if (!user) {
+        throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+      }
+      await this.bookingRepository.update(dto, { where: { id } });
+      return await this.bookingRepository.findOne({
+        where: { id },
+      });
     } catch (error) {
       console.log(error);
     }

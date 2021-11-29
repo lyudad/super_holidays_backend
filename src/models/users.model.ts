@@ -9,7 +9,7 @@ interface UserCreationAttrs {
   password: string;
 }
 
-export enum Roles {
+export enum Role {
   USER = 'user',
   ADMIN = 'admin',
   SUPER = 'super',
@@ -81,7 +81,7 @@ export class User extends Model<User, UserCreationAttrs> {
     type: DataType.ENUM('user', 'admin', 'super'),
     defaultValue: 'user',
   })
-  roles: Roles;
+  roles: Role;
 
   @HasMany(() => Booking)
   dates: Booking[];
