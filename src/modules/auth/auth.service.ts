@@ -47,14 +47,14 @@ export class AuthService {
           { uid: LoginUser.id, sid: newSession.id },
           {
             secret: process.env.SECRET_KEY,
-            expiresIn: '1h',
+            expiresIn: process.env.JWT_SECRET_TIME,
           },
         );
         const refreshToken = this.jwtService.sign(
           { uid: LoginUser.id, sid: newSession.id },
           {
             secret: process.env.SECRET_KEY,
-            expiresIn: '2d',
+            expiresIn: process.env.JWT_SECRET_TIME_REFRESH,
           },
         );
         return await this.userService
@@ -69,6 +69,9 @@ export class AuthService {
               email: LoginUser.email,
               name: `${LoginUser.first_name}  ${LoginUser.last_name}`,
               role: LoginUser.roles,
+              id: LoginUser.id,
+              vacation: LoginUser.total_vacations,
+              sick_leaves: LoginUser.total_sick_leaves,
             };
             return {
               data,
@@ -110,13 +113,16 @@ export class AuthService {
         { uid: request.user.id, sid: newSession.id },
         {
           secret: process.env.SECRET_KEY,
-          expiresIn: '1h',
+          expiresIn: process.env.JWT_SECRET_TIME,
         },
       );
       const refreshToken = this.jwtService.sign(
         { uid: request.user.id, sid: newSession.id },
 
-        { secret: process.env.SECRET_KEY, expiresIn: '2d' },
+        {
+          secret: process.env.SECRET_KEY,
+          expiresIn: process.env.JWT_SECRET_TIME_REFRESH,
+        },
       );
       return {
         data: { accessToken, refreshToken, sid: newSession.id },
