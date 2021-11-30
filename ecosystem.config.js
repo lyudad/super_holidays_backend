@@ -1,12 +1,13 @@
 module.exports = {
   apps: [
     {
-      name: 'app',
-      script: 'yarn',
-      args: 'start:dev',
-      interpreter: '/bin/bash',
-      env: {
-        PORT: Number(process.env.PORT),
+      name: 'super_holidays',
+      script: 'npm',
+      args: 'start',
+     // interpreter: '/bin/bash',
+watch: true,     
+ env: {
+        PORT: 8081,
         DB_HOST: 'remotemysql.com',
         DB_USER: 'AIqO6told3',
         DB_PASSWORD: 'ffQRNsZoNk',
