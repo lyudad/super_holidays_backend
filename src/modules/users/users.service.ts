@@ -19,6 +19,20 @@ export class UsersService {
     }
   }
 
+  async getCurrentUser(res) {
+    const user = await this.userRepository.findOne({
+      where: { id: res.user.id },
+    });
+
+    return {
+      name: `${user.first_name} ${user.last_name}`,
+      email: user.email,
+      role: user.roles,
+      vacation: user.total_vacations,
+      sick_leaves: user.total_sick_leaves,
+    };
+  }
+
   async getAllUsers() {
     const users = await this.userRepository.findAll({
       include: { all: true },

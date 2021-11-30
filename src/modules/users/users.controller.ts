@@ -7,6 +7,7 @@ import {
   Delete,
   Param,
   Patch,
+  Req,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './create-user.dto';
@@ -15,6 +16,7 @@ import { Role, User } from 'models/users.model';
 import { JwtAuthGuard } from 'modules/auth/jwt-auth.guard';
 import { BlockUserDto } from './block-user.dto';
 import { UpdateUserDto } from './update-user.dto';
+import { Request } from 'express';
 import { hasRoles } from 'modules/auth/roles.decorator';
 import { RolesGuard } from 'modules/auth/roles.guard';
 import { RoleUserDto } from './role-user.dto';
@@ -31,6 +33,14 @@ export class UsersController {
   @hasRoles(Role.ADMIN) // SUPER
   create(@Body() userDto: CreateUserDto) {
     return this.usersService.createUser(userDto);
+  }
+
+  @ApiOperation({ summary: 'Get current users' })
+  @ApiResponse({ status: 200, type: [User] })
+  @UseGuards(JwtAuthGuard)
+  @Get('/current')
+  getCurrent(@Req() request: Request) {
+    return this.usersService.getCurrentUser(request);
   }
 
   @ApiOperation({ summary: 'Get all users' })

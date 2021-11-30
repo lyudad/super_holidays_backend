@@ -9,8 +9,8 @@ import { Session } from 'models/session.model';
 
 @Module({
   imports: [
-    SequelizeModule.forFeature([User, Booking, Session]),
     forwardRef(() => AuthModule),
+    SequelizeModule.forFeature([User, Booking, Session]),
   ],
   exports: [UsersService],
   controllers: [UsersController],

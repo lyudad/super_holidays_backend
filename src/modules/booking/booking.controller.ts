@@ -24,6 +24,7 @@ export class BookingController {
 
   @ApiOperation({ summary: 'Create booking' })
   @ApiResponse({ status: 200, type: Booking })
+  @UseGuards(JwtAuthGuard)
   @Post()
   @UseGuards(JwtAuthGuard)
   create(@Body() dto: CreateBookingDto) {
