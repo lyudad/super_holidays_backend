@@ -1,4 +1,3 @@
-
 module.exports = {
   apps: [
     {
@@ -8,12 +7,12 @@ module.exports = {
       interpreter: '/bin/bash',
       env: {
         PORT: Number(process.env.PORT),
-        DB_HOST: process.env.DB_HOST,
-        DB_USER: process.env.DB_USER,
-        DB_PASSWORD: process.env.DB_PASSWORD,
-        DB_NAME: process.env.DB_USER,
-        DB_PORT: Number(process.env.DB_PORT),
-        SECRET_KEY: process.env.SECRET_KEY,
+        DB_HOST: 'remotemysql.com',
+        DB_USER: 'AIqO6told3',
+        DB_PASSWORD: 'ffQRNsZoNk',
+        DB_NAME: 'AIqO6told3',
+        DB_PORT: 3306,
+        SECRET_KEY: 'secret_key_safasf',
       },
     },
   ],
