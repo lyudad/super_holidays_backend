@@ -66,9 +66,14 @@ export class AuthService {
               sid: newSession.id,
             };
             const user = {
+              id: LoginUser.id,
               email: LoginUser.email,
               name: `${LoginUser.first_name}  ${LoginUser.last_name}`,
               role: LoginUser.roles,
+              isBlocked: LoginUser.isBlocked,
+              vacation: LoginUser.total_vacations,
+              sick_leaves: LoginUser.total_sick_leaves,
+              dates: LoginUser.dates,
             };
             return {
               data,
