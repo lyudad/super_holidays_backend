@@ -52,14 +52,14 @@ export class UsersController {
     return this.usersService.getAllUsers();
   }
 
-  @ApiOperation({ summary: 'Block users' })
-  @ApiResponse({ status: 200, type: [User] })
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Post('/block')
-  @hasRoles(Role.ADMIN) // SUPER
-  blockUser(@Body() dto: BlockUserDto) {
-    return this.usersService.blockUser(dto);
-  }
+  // @ApiOperation({ summary: 'Block users' })
+  // @ApiResponse({ status: 200, type: [User] })
+  // @UseGuards(JwtAuthGuard, RolesGuard)
+  // @Post('/block')
+  // @hasRoles(Role.ADMIN) // SUPER
+  // blockUser(@Body() dto: BlockUserDto) {
+  //   return this.usersService.blockUser(dto);
+  // }
 
   @ApiOperation({ summary: 'Delete users' })
   @ApiResponse({ status: 204 })
