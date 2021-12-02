@@ -37,6 +37,30 @@ export class BookingService {
     }
   }
 
+  async getCurrentBooking(res) {
+    try {
+      const booking = await this.bookingRepository.findAll({
+        where: { userId: res.user.id },
+        include: { all: true },
+      });
+      const result = booking.map((e) => {
+        return {
+          id: e.id,
+          start_day: e.start_day,
+          end_day: e.end_day,
+          type: e.type,
+          status: e.status,
+          userId: e.userId,
+          createdAt: e.createdAt,
+          updatedAt: e.updatedAt,
+        };
+      });
+      return result;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async updateStatus(id: number, dto: UpdateStatusDto) {
     try {
       const user = await this.bookingRepository.findOne({

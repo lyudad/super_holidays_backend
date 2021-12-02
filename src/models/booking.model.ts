@@ -26,6 +26,7 @@ export enum Status {
 export enum VacationType {
   SICK_LEAVE = 'sick_leave',
   VACATION = 'vacation',
+  OWN_EXPENSE = 'own expense',
 }
 
 @Table({ tableName: 'booking' })
@@ -56,7 +57,7 @@ export class Booking extends Model<Booking, BookingCreationAttrs> {
   // не понятно
   @ApiProperty({ example: 'vacation', description: 'vacation type' })
   @Column({
-    type: DataType.ENUM('sick leave', 'vacation'),
+    type: DataType.ENUM('sick leave', 'vacation', 'own expense'),
     defaultValue: 'vacation',
   })
   type: VacationType;
