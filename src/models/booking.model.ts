@@ -53,7 +53,7 @@ export class Booking extends Model<Booking, BookingCreationAttrs> {
     allowNull: false,
   })
   end_day: string;
-  // не понятно
+
   @ApiProperty({ example: 'vacation', description: 'vacation type' })
   @Column({
     type: DataType.ENUM('sick leave', 'vacation', 'own expense'),

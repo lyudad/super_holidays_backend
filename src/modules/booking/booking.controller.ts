@@ -32,7 +32,7 @@ export class BookingController {
   create(@Body() dto: CreateBookingDto) {
     return this.bookingService.create(dto);
   }
-  @ApiOperation({ summary: 'Create booking' })
+  @ApiOperation({ summary: 'Get booking current user' })
   @ApiResponse({ status: 200, type: Booking })
   @UseGuards(JwtAuthGuard)
   @Get()
