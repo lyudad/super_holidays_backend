@@ -9,7 +9,7 @@ import { LoginUserDto } from '../users/create-user.dto';
 export class MailController {
   constructor(private readonly mailService: MailService) {}
 
-  @ApiOperation({ summary: 'Create user' })
+  @ApiOperation({ summary: 'Send mail with password' })
   @ApiResponse({ status: 201 })
   @UseGuards(JwtAuthGuard)
   @Post()

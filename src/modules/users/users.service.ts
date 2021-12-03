@@ -46,6 +46,7 @@ export class UsersService {
         isBlocked: user.isBlocked,
         vacation: user.total_vacations,
         sick_leaves: user.total_sick_leaves,
+        dates: user.dates,
       };
     });
     return newUsers;
