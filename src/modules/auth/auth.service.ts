@@ -47,14 +47,14 @@ export class AuthService {
           { uid: loginUser.id, sid: newSession.id },
           {
             secret: process.env.SECRET_KEY,
-            expiresIn: '1h',
+            expiresIn: process.env.JWT_SECRET_TIME,
           },
         );
         const refreshToken = this.jwtService.sign(
           { uid: loginUser.id, sid: newSession.id },
           {
             secret: process.env.SECRET_KEY,
-            expiresIn: '2d',
+            expiresIn: process.env.JWT_SECRET_TIME_REFRESH,
           },
         );
         return await this.userService
@@ -67,13 +67,13 @@ export class AuthService {
             };
             const user = {
               id: loginUser.id,
+              first_name: loginUser.first_name,
+              last_name: loginUser.last_name,
               email: loginUser.email,
-              name: `${loginUser.first_name}  ${loginUser.last_name}`,
-              role: loginUser.roles,
+              role: loginUser.role,
               isBlocked: loginUser.isBlocked,
-              vacation: loginUser.total_vacations,
-              sick_leaves: loginUser.total_sick_leaves,
-              dates: loginUser.dates,
+              vacation: loginUser.vacation,
+              sick_leaves: loginUser.sick_leaves,
             };
             return {
               data,
@@ -136,7 +136,7 @@ export class AuthService {
       const user = await this.userService.getUserByEmail(userDto.email);
       const passwordEquals = await bcrypt.compare(
         userDto.password,
-        user.password,
+        userDto.password,
       );
       if (user && passwordEquals) {
         return user;

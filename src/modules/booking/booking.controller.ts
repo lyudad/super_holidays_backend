@@ -43,7 +43,7 @@ export class BookingController {
   @ApiResponse({ status: 200, type: Booking })
   @Patch('/:id/status')
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @hasRoles(Role.ADMIN) // SUPER
+  @hasRoles(Role.ADMIN || Role.SUPER)
   updateStatus(@Param('id') id: number, @Body() dto: UpdateStatusDto) {
     return this.bookingService.updateStatus(id, dto);
   }
