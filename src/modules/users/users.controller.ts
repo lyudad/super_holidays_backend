@@ -14,7 +14,6 @@ import { CreateUserDto } from './create-user.dto';
 import { UsersService } from './users.service';
 import { Role, User } from 'models/users.model';
 import { JwtAuthGuard } from 'modules/auth/jwt-auth.guard';
-import { BlockUserDto } from './block-user.dto';
 import { UpdateUserDto } from './update-user.dto';
 import { Request } from 'express';
 import { hasRoles } from 'modules/auth/roles.decorator';
@@ -51,15 +50,6 @@ export class UsersController {
   getAll() {
     return this.usersService.getAllUsers();
   }
-
-  // @ApiOperation({ summary: 'Block users' })
-  // @ApiResponse({ status: 200, type: [User] })
-  // @UseGuards(JwtAuthGuard, RolesGuard)
-  // @Post('/block')
-  // @hasRoles(Role.ADMIN) // SUPER
-  // blockUser(@Body() dto: BlockUserDto) {
-  //   return this.usersService.blockUser(dto);
-  // }
 
   @ApiOperation({ summary: 'Delete users' })
   @ApiResponse({ status: 204 })

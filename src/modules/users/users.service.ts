@@ -1,6 +1,5 @@
 import { HttpStatus, HttpException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { BlockUserDto } from './block-user.dto';
 import { CreateUserDto } from './create-user.dto';
 import { User } from 'models/users.model';
 import { UpdateUserDto } from './update-user.dto';
@@ -63,20 +62,6 @@ export class UsersService {
       console.log(e.message);
     }
   }
-
-  // async blockUser(dto: BlockUserDto) {
-  //   try {
-  //     const user = await this.userRepository.findByPk(dto.userId);
-  //     if (!user) {
-  //       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
-  //     }
-  //     user.isBlocked = true;
-  //     await user.save();
-  //     return user;
-  //   } catch (e) {
-  //     console.log(e.message);
-  //   }
-  // }
 
   async deleteUser(id: number) {
     try {
