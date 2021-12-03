@@ -37,7 +37,19 @@ export class UsersService {
     const users = await this.userRepository.findAll({
       include: { all: true },
     });
-    return users;
+
+    const newUsers = users.map((user) => {
+      return {
+        id: user.id,
+        name: `${user.first_name} ${user.last_name}`,
+        email: user.email,
+        role: user.roles,
+        isBlocked: user.isBlocked,
+        vacation: user.total_vacations,
+        sick_leaves: user.total_sick_leaves,
+      };
+    });
+    return newUsers;
   }
 
   async getUserByEmail(email: string) {
@@ -52,19 +64,19 @@ export class UsersService {
     }
   }
 
-  async blockUser(dto: BlockUserDto) {
-    try {
-      const user = await this.userRepository.findByPk(dto.userId);
-      if (!user) {
-        throw new HttpException('Not found', HttpStatus.NOT_FOUND);
-      }
-      user.isBlocked = true;
-      await user.save();
-      return user;
-    } catch (e) {
-      console.log(e.message);
-    }
-  }
+  // async blockUser(dto: BlockUserDto) {
+  //   try {
+  //     const user = await this.userRepository.findByPk(dto.userId);
+  //     if (!user) {
+  //       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
+  //     }
+  //     user.isBlocked = true;
+  //     await user.save();
+  //     return user;
+  //   } catch (e) {
+  //     console.log(e.message);
+  //   }
+  // }
 
   async deleteUser(id: number) {
     try {

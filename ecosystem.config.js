@@ -4,9 +4,9 @@ module.exports = {
       name: 'super_holidays',
       script: 'npm',
       args: 'start',
-     // interpreter: '/bin/bash',
-watch: true,     
- env: {
+      // interpreter: '/bin/bash',
+      watch: true,
+      env: {
         PORT: 8081,
         DB_HOST: 'remotemysql.com',
         DB_USER: 'AIqO6told3',

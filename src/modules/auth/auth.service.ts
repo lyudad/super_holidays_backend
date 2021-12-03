@@ -38,27 +38,27 @@ export class AuthService {
 
   async login(userDto: LoginUserDto) {
     try {
-      const LoginUser = await this.validateUser(userDto);
+      const loginUser = await this.validateUser(userDto);
       try {
         const newSession = await this.sessionRepository.create({
-          uid: LoginUser.id,
+          uid: loginUser.id,
         });
         const accessToken = this.jwtService.sign(
-          { uid: LoginUser.id, sid: newSession.id },
+          { uid: loginUser.id, sid: newSession.id },
           {
             secret: process.env.SECRET_KEY,
             expiresIn: '1h',
           },
         );
         const refreshToken = this.jwtService.sign(
-          { uid: LoginUser.id, sid: newSession.id },
+          { uid: loginUser.id, sid: newSession.id },
           {
             secret: process.env.SECRET_KEY,
             expiresIn: '2d',
           },
         );
         return await this.userService
-          .getUserByEmail(LoginUser.email)
+          .getUserByEmail(loginUser.email)
           .then(() => {
             const data = {
               accessToken,
@@ -66,9 +66,14 @@ export class AuthService {
               sid: newSession.id,
             };
             const user = {
-              email: LoginUser.email,
-              name: `${LoginUser.first_name}  ${LoginUser.last_name}`,
-              role: LoginUser.roles,
+              id: loginUser.id,
+              email: loginUser.email,
+              name: `${loginUser.first_name}  ${loginUser.last_name}`,
+              role: loginUser.roles,
+              isBlocked: loginUser.isBlocked,
+              vacation: loginUser.total_vacations,
+              sick_leaves: loginUser.total_sick_leaves,
+              dates: loginUser.dates,
             };
             return {
               data,
