@@ -2,10 +2,13 @@ import {
   Body,
   Controller,
   Post,
+  Get,
   Param,
   Patch,
   UseGuards,
+  Req,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { Booking } from 'models/booking.model';
 import { CreateBookingDto } from './create-booking.dto';
 import { UpdateBookingDto } from './update-booking.dto';
@@ -26,15 +29,21 @@ export class BookingController {
   @ApiResponse({ status: 200, type: Booking })
   @UseGuards(JwtAuthGuard)
   @Post()
-  @UseGuards(JwtAuthGuard)
   create(@Body() dto: CreateBookingDto) {
     return this.bookingService.create(dto);
+  }
+  @ApiOperation({ summary: 'Get booking current user' })
+  @ApiResponse({ status: 200, type: Booking })
+  @UseGuards(JwtAuthGuard)
+  @Get()
+  getCurrentBooking(@Req() res: Request) {
+    return this.bookingService.getCurrentBooking(res);
   }
 
   @ApiOperation({ summary: 'Update booking' })
   @ApiResponse({ status: 200, type: Booking })
-  @Patch('/:id')
   @UseGuards(JwtAuthGuard)
+  @Patch('/:id')
   updateBooking(@Param('id') id: number, @Body() dto: UpdateBookingDto) {
     return this.bookingService.updateBooking(id, dto);
   }

@@ -10,8 +10,8 @@ import {
 import { User } from 'models/users.model';
 
 interface BookingCreationAttrs {
-  start_day: Date;
-  end_day: Date;
+  start_day: string;
+  end_day: string;
   type: string;
   status: string;
   userId: number;
@@ -26,6 +26,7 @@ export enum Status {
 export enum VacationType {
   SICK_LEAVE = 'sick_leave',
   VACATION = 'vacation',
+  OWN_EXPENSE = 'own expense',
 }
 
 @Table({ tableName: 'booking' })
@@ -41,22 +42,21 @@ export class Booking extends Model<Booking, BookingCreationAttrs> {
 
   @ApiProperty({ example: '12-12-2021', description: 'Start day' })
   @Column({
-    type: DataType.DATE,
+    type: DataType.STRING,
     allowNull: false,
   })
-  start_day: Date;
+  start_day: string;
 
   @ApiProperty({ example: '15-12-2021', description: 'End day' })
   @Column({
-    type: DataType.DATE,
+    type: DataType.STRING,
     allowNull: false,
   })
-  end_day: Date;
+  end_day: string;
 
-  // не понятно
   @ApiProperty({ example: 'vacation', description: 'vacation type' })
   @Column({
-    type: DataType.ENUM('sick leave', 'vacation'),
+    type: DataType.ENUM('sick leave', 'vacation', 'own expense'),
     defaultValue: 'vacation',
   })
   type: VacationType;
