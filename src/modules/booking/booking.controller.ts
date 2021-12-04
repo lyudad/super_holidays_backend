@@ -9,7 +9,6 @@ import {
   Req,
 } from '@nestjs/common';
 import { Request } from 'express';
-import { Booking } from 'models/booking.model';
 import { CreateBookingDto } from './create-booking.dto';
 import { UpdateBookingDto } from './update-booking.dto';
 import { BookingService } from './booking.service';
