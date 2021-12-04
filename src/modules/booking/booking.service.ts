@@ -14,7 +14,14 @@ export class BookingService {
   async create(dto: CreateBookingDto) {
     try {
       const booking = await this.bookingRepository.create(dto);
-      return booking;
+      return {
+        id: booking.id,
+        start_day: booking.start_day,
+        end_day: booking.end_day,
+        type: booking.type,
+        status: booking.status,
+        userId: booking.userId,
+      };
     } catch (e) {
       console.log(e.message);
     }
@@ -29,9 +36,17 @@ export class BookingService {
         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
       }
       await this.bookingRepository.update(dto, { where: { id } });
-      return await this.bookingRepository.findOne({
+      const updatedBooking = await this.bookingRepository.findOne({
         where: { id },
       });
+      return {
+        id: updatedBooking.id,
+        start_day: updatedBooking.start_day,
+        end_day: updatedBooking.end_day,
+        type: updatedBooking.type,
+        status: updatedBooking.status,
+        userId: updatedBooking.userId,
+      };
     } catch (error) {
       console.log(error);
     }
@@ -51,8 +66,6 @@ export class BookingService {
           type: e.type,
           status: e.status,
           userId: e.userId,
-          createdAt: e.createdAt,
-          updatedAt: e.updatedAt,
         };
       });
       return result;
@@ -70,9 +83,17 @@ export class BookingService {
         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
       }
       await this.bookingRepository.update(dto, { where: { id } });
-      return await this.bookingRepository.findOne({
+      const booking = await this.bookingRepository.findOne({
         where: { id },
       });
+      return {
+        id: booking.id,
+        start_day: booking.start_day,
+        end_day: booking.end_day,
+        type: booking.type,
+        status: booking.status,
+        userId: booking.userId,
+      };
     } catch (error) {
       console.log(error);
     }

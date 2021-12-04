@@ -28,7 +28,7 @@ export class CreateUserDtoResponse {
   id: number;
 }
 
-class GetAllUserResponseDates {
+export class GetAllUserResponseDates {
   @ApiProperty({ example: 1, description: 'Id' })
   id: number;
   @ApiProperty({ example: 'Fri Dec 03 2021', description: 'Start day' })
@@ -37,7 +37,7 @@ class GetAllUserResponseDates {
   end_day: string;
   @ApiProperty({ example: 'vacation', description: 'Type action' })
   type: VacationType;
-  @ApiProperty({ example: 'rejected', description: 'Status action' })
+  @ApiProperty({ example: 'pending', description: 'Status action' })
   status: Status;
   @ApiProperty({ example: 1, description: 'User id' })
   userId: number;
