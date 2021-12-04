@@ -1,10 +1,14 @@
+import { AuthService } from './../auth/auth.service';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
 import { LoginUserDto } from 'modules/users/create-user.dto';
 
 @Injectable()
 export class MailService {
-  constructor(private mailerService: MailerService) {}
+  constructor(
+    private mailerService: MailerService,
+    private authService: AuthService,
+  ) {}
 
   async sendUserInformation(user: LoginUserDto) {
     await this.mailerService.sendMail({
@@ -18,5 +22,6 @@ export class MailService {
         password: user.password,
       },
     });
+    await this.authService.createPassword(user.email, user.password);
   }
 }

@@ -25,15 +25,31 @@ export class AuthService {
           HttpStatus.BAD_REQUEST,
         );
       }
-      const hasPassword = await bcrypt.hash(userDto.password, 5);
+      // const hasPassword = await bcrypt.hash(userDto.password, 5);
       const user = await this.userService.createUser({
         ...userDto,
-        password: hasPassword,
+        // password: hasPassword,
       });
-      return user;
+      return {
+        total_sick_leaves: user.total_sick_leaves,
+        total_vacations: user.total_vacations,
+        isBlocked: user.isBlocked,
+        roles: user.roles,
+        id: user.id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+      };
     } catch (e) {
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
+  }
+  async createPassword(email: string, password: string) {
+    const hasPassword = await bcrypt.hash(password, 5);
+    await this.userRepository.update(
+      { password: hasPassword },
+      { where: { email } },
+    );
   }
 
   async login(userDto: LoginUserDto) {
@@ -68,7 +84,8 @@ export class AuthService {
             const user = {
               id: LoginUser.id,
               email: LoginUser.email,
-              name: `${LoginUser.first_name}  ${LoginUser.last_name}`,
+              first_name: LoginUser.first_name,
+              last_name: LoginUser.last_name,
               role: LoginUser.roles,
               isBlocked: LoginUser.isBlocked,
               vacation: LoginUser.total_vacations,

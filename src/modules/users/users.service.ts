@@ -19,25 +19,31 @@ export class UsersService {
     }
   }
 
-  async getCurrentUser(res) {
-    const user = await this.userRepository.findOne({
-      where: { id: res.user.id },
-    });
-
-    return {
-      name: `${user.first_name} ${user.last_name}`,
-      email: user.email,
-      role: user.roles,
-      vacation: user.total_vacations,
-      sick_leaves: user.total_sick_leaves,
-    };
-  }
-
   async getAllUsers() {
     const users = await this.userRepository.findAll({
       include: { all: true },
     });
-    return users;
+    return users.map((e) => {
+      return {
+        id: e.id,
+        first_name: e.first_name,
+        last_name: e.last_name,
+        email: e.email,
+        total_sick_leaves: e.total_sick_leaves,
+        total_vacations: e.total_vacations,
+        isBlocked: e.isBlocked,
+        dates: e.dates.map((e) => {
+          return {
+            id: e.id,
+            start_day: e.start_day,
+            end_day: e.end_day,
+            type: e.type,
+            status: e.status,
+            userId: e.userId,
+          };
+        }),
+      };
+    });
   }
 
   async getUserByEmail(email: string) {
@@ -58,9 +64,17 @@ export class UsersService {
       if (!user) {
         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
       }
-      user.isBlocked = true;
+      user.isBlocked = !user.isBlocked;
       await user.save();
-      return user;
+      return {
+        id: user.id,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        total_sick_leaves: user.total_sick_leaves,
+        total_vacations: user.total_vacations,
+        isBlocked: user.isBlocked,
+      };
     } catch (e) {
       console.log(e.message);
     }
@@ -68,10 +82,9 @@ export class UsersService {
 
   async deleteUser(id: number) {
     try {
-      const user = await this.userRepository.findOne({
+      await this.userRepository.destroy({
         where: { id },
       });
-      return this.userRepository.delete(user);
     } catch (e) {
       console.log(e.message);
     }
