@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsEmail, IsOptional, IsString } from 'class-validator';
+import { IsBoolean, IsEmail, IsOptional, IsString } from 'class-validator';
 
 export class UpdateUserDto {
   @ApiProperty({ example: 'Ivan', description: 'First name' })
@@ -17,4 +17,13 @@ export class UpdateUserDto {
   @IsEmail({}, { message: 'Incorrect email' })
   @IsOptional()
   email: string;
+
+  @ApiProperty({ example: 'true', description: 'isBlock' })
+  @IsBoolean({ message: 'Boolean' })
+  @IsOptional()
+  isBlocked: boolean;
+
+  // @ApiProperty({ example: '15', description: 'id' })
+  // @IsNumber({}, { message: 'Must be a number' })
+  // readonly userId: number;
 }
