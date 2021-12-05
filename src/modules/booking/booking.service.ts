@@ -52,10 +52,10 @@ export class BookingService {
     }
   }
 
-  async getCurrentBooking(res) {
+  async getCurrentBooking(id: number) {
     try {
       const booking = await this.bookingRepository.findAll({
-        where: { userId: res.user.id },
+        where: { userId: id },
         include: { all: true },
       });
       const result = booking.map((e) => {

@@ -6,9 +6,7 @@ import {
   Param,
   Patch,
   UseGuards,
-  Req,
 } from '@nestjs/common';
-import { Request } from 'express';
 import { CreateBookingDto } from './create-booking.dto';
 import { UpdateBookingDto } from './update-booking.dto';
 import { BookingService } from './booking.service';
@@ -32,12 +30,12 @@ export class BookingController {
   create(@Body() dto: CreateBookingDto) {
     return this.bookingService.create(dto);
   }
-  @ApiOperation({ summary: 'Get booking current user' })
+  @ApiOperation({ summary: 'Get user bookings by id' })
   @ApiResponse({ status: 200, type: [GetAllUserResponseDates] })
   @UseGuards(JwtAuthGuard)
-  @Get()
-  getCurrentBooking(@Req() res: Request) {
-    return this.bookingService.getCurrentBooking(res);
+  @Get('/:id')
+  getCurrentBooking(@Param('id') id: number) {
+    return this.bookingService.getCurrentBooking(id);
   }
 
   @ApiOperation({ summary: 'Update booking' })
