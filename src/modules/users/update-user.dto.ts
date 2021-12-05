@@ -22,8 +22,4 @@ export class UpdateUserDto {
   @IsBoolean({ message: 'Boolean' })
   @IsOptional()
   isBlocked: boolean;
-
-  // @ApiProperty({ example: '15', description: 'id' })
-  // @IsNumber({}, { message: 'Must be a number' })
-  // readonly userId: number;
 }
