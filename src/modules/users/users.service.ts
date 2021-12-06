@@ -99,9 +99,18 @@ export class UsersService {
         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
       }
       await this.userRepository.update(dto, { where: { id } });
-      return await this.userRepository.findOne({
+      const updatedUser = await this.userRepository.findOne({
         where: { id },
       });
+      return {
+        id: updatedUser.id,
+        first_name: updatedUser.first_name,
+        last_name: updatedUser.last_name,
+        email: updatedUser.email,
+        total_sick_leaves: updatedUser.total_sick_leaves,
+        total_vacations: updatedUser.total_vacations,
+        isBlocked: updatedUser.isBlocked,
+      };
     } catch (error) {
       console.log(error);
     }
@@ -114,9 +123,19 @@ export class UsersService {
         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
       }
       await this.userRepository.update(dto, { where: { id } });
-      return await this.userRepository.findOne({
+      const updatedUser = await this.userRepository.findOne({
         where: { id },
       });
+      return {
+        id: updatedUser.id,
+        first_name: updatedUser.first_name,
+        last_name: updatedUser.last_name,
+        email: updatedUser.email,
+        total_sick_leaves: updatedUser.total_sick_leaves,
+        total_vacations: updatedUser.total_vacations,
+        isBlocked: updatedUser.isBlocked,
+        roles: updatedUser.roles,
+      };
     } catch (e) {
       console.log(e.message);
     }

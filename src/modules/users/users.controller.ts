@@ -10,7 +10,7 @@ import {
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { UsersService } from './users.service';
-import { Role, User } from 'models/users.model';
+import { Role } from 'models/users.model';
 import { JwtAuthGuard } from 'modules/auth/jwt-auth.guard';
 import { BlockUserDto } from './block-user.dto';
 import { UpdateUserDto } from './update-user.dto';
@@ -31,7 +31,7 @@ export class UsersController {
   @ApiResponse({ status: 200, type: [GetAllUserResponse] })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get()
-  @hasRoles(Role.ADMIN) // SUPER
+  @hasRoles(Role.ADMIN || Role.SUPER)
   getAll() {
     return this.usersService.getAllUsers();
   }
@@ -40,7 +40,7 @@ export class UsersController {
   @ApiResponse({ status: 200, type: CreateUserDtoResponse })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Post('/block')
-  @hasRoles(Role.ADMIN, Role.SUPER) // SUPER
+  @hasRoles(Role.ADMIN || Role.SUPER)
   blockUser(@Body() dto: BlockUserDto) {
     return this.usersService.blockUser(dto);
   }
@@ -49,23 +49,23 @@ export class UsersController {
   @ApiResponse({ status: 200 })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete('/:id')
-  @hasRoles(Role.ADMIN) // SUPER
+  @hasRoles(Role.ADMIN || Role.SUPER)
   deleteUser(@Param('id') id: number) {
     return this.usersService.deleteUser(id);
   }
 
   @ApiOperation({ summary: 'Update users' })
-  @ApiResponse({ status: 200, type: [User] })
+  @ApiResponse({ status: 200, type: CreateUserDtoResponse })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch('/:id')
-  @hasRoles(Role.ADMIN) // SUPER
+  @hasRoles(Role.ADMIN || Role.SUPER)
   updateUser(@Param('id') id: number, @Body() dto: UpdateUserDto) {
     return this.usersService.updateUser(id, dto);
   }
 
   //ONLY SUPER!!!!!!!!!!!!!!!!
   @ApiOperation({ summary: 'Update role' })
-  @ApiResponse({ status: 200, type: [User] })
+  @ApiResponse({ status: 200, type: CreateUserDtoResponse })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch('/:id/roles')
   @hasRoles(Role.SUPER)
