@@ -75,13 +75,9 @@ export class UsersService {
 
   async blockUser(id: number, dto: BlockUserDto) {
     try {
-      const user = await this.userRepository.findOne({
+      await this.userRepository.findOne({
         where: { id },
       });
-      if (!user) {
-        throw new HttpException('Not found', HttpStatus.NOT_FOUND);
-      }
-      console.log(dto);
       await this.userRepository.update(dto, { where: { id } });
       return await this.userRepository.findOne({
         where: { id },
