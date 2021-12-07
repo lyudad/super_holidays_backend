@@ -13,32 +13,10 @@ export class UsersService {
   async createUser(dto: CreateUserDto) {
     try {
       const user = await this.userRepository.create(dto);
-      return {
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: user.email,
-        role: user.roles,
-        vacation: user.total_vacations,
-        sick_leaves: user.total_sick_leaves,
-      };
+      return this.filterUser(user);
     } catch (e) {
       console.log(e.message);
     }
-  }
-
-  async getCurrentUser(res) {
-    const user = await this.userRepository.findOne({
-      where: { id: res.user.id },
-    });
-
-    return {
-      first_name: user.first_name,
-      last_name: user.last_name,
-      email: user.email,
-      role: user.roles,
-      vacation: user.total_vacations,
-      sick_leaves: user.total_sick_leaves,
-    };
   }
 
   async getAllUsers() {
@@ -47,16 +25,7 @@ export class UsersService {
     });
 
     const newUsers = users.map((user) => {
-      return {
-        id: user.id,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: user.email,
-        role: user.roles,
-        isBlocked: user.isBlocked,
-        vacation: user.total_vacations,
-        sick_leaves: user.total_sick_leaves,
-      };
+      return this.filterUser(user);
     });
     return newUsers;
   }
@@ -79,9 +48,10 @@ export class UsersService {
         where: { id },
       });
       await this.userRepository.update(dto, { where: { id } });
-      return await this.userRepository.findOne({
+      const user = await this.userRepository.findOne({
         where: { id },
       });
+      return this.filterUser(user);
     } catch (e) {
       console.log(e.message);
     }
@@ -107,9 +77,10 @@ export class UsersService {
         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
       }
       await this.userRepository.update(dto, { where: { id } });
-      return await this.userRepository.findOne({
+      const newUser = await this.userRepository.findOne({
         where: { id },
       });
+      return this.filterUser(newUser);
     } catch (error) {
       console.log(error);
     }
@@ -122,11 +93,24 @@ export class UsersService {
         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
       }
       await this.userRepository.update(dto, { where: { id } });
-      return await this.userRepository.findOne({
+      const newUser = await this.userRepository.findOne({
         where: { id },
       });
+      return this.filterUser(newUser);
     } catch (e) {
       console.log(e.message);
     }
+  }
+  private filterUser(user: User) {
+    return {
+      id: user.id,
+      first_name: user.first_name,
+      last_name: user.last_name,
+      email: user.email,
+      role: user.roles,
+      isBlocked: user.isBlocked,
+      vacation: user.total_vacations,
+      sick_leaves: user.total_sick_leaves,
+    };
   }
 }
