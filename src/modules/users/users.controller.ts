@@ -20,6 +20,10 @@ import { Request } from 'express';
 import { hasRoles } from 'modules/auth/roles.decorator';
 import { RolesGuard } from 'modules/auth/roles.guard';
 import { RoleUserDto } from './role-user.dto';
+import {
+  GetAllUserResponse,
+  CreateUserDtoResponse,
+} from './types-api-user.dto';
 
 @ApiTags('Users')
 @Controller('users')
@@ -27,7 +31,7 @@ export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
   @ApiOperation({ summary: 'Create user' })
-  @ApiResponse({ status: 201, type: User })
+  @ApiResponse({ status: 201, type: CreateUserDtoResponse })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Post()
   @hasRoles(Role.ADMIN, Role.SUPER)
@@ -36,7 +40,7 @@ export class UsersController {
   }
 
   @ApiOperation({ summary: 'Get current users' })
-  @ApiResponse({ status: 200, type: [User] })
+  @ApiResponse({ status: 200, type: CreateUserDtoResponse })
   @UseGuards(JwtAuthGuard)
   @Get('/current')
   getCurrent(@Req() request: Request) {
@@ -44,7 +48,7 @@ export class UsersController {
   }
 
   @ApiOperation({ summary: 'Get all users' })
-  @ApiResponse({ status: 200, type: [User] })
+  @ApiResponse({ status: 200, type: [GetAllUserResponse] })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get()
   @hasRoles(Role.ADMIN, Role.SUPER)
@@ -53,7 +57,7 @@ export class UsersController {
   }
 
   @ApiOperation({ summary: 'Block users' })
-  @ApiResponse({ status: 200, type: [User] })
+  @ApiResponse({ status: 200, type: CreateUserDtoResponse })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch('/:id/block')
   @hasRoles(Role.ADMIN, Role.SUPER)
@@ -71,7 +75,7 @@ export class UsersController {
   }
 
   @ApiOperation({ summary: 'Update users' })
-  @ApiResponse({ status: 200, type: [User] })
+  @ApiResponse({ status: 200, type: CreateUserDtoResponse })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch('/:id')
   @hasRoles(Role.ADMIN, Role.SUPER)
@@ -80,7 +84,7 @@ export class UsersController {
   }
 
   @ApiOperation({ summary: 'Update role' })
-  @ApiResponse({ status: 200, type: [User] })
+  @ApiResponse({ status: 200, type: CreateUserDtoResponse })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch('/roles')
   @hasRoles(Role.SUPER)
