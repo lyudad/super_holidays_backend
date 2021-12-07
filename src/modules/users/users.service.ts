@@ -13,7 +13,14 @@ export class UsersService {
   async createUser(dto: CreateUserDto) {
     try {
       const user = await this.userRepository.create(dto);
-      return user;
+      return {
+        first_name: user.first_name,
+        last_name: user.last_name,
+        email: user.email,
+        role: user.roles,
+        vacation: user.total_vacations,
+        sick_leaves: user.total_sick_leaves,
+      };
     } catch (e) {
       console.log(e.message);
     }
@@ -25,7 +32,8 @@ export class UsersService {
     });
 
     return {
-      name: `${user.first_name} ${user.last_name}`,
+      first_name: user.first_name,
+      last_name: user.last_name,
       email: user.email,
       role: user.roles,
       vacation: user.total_vacations,
@@ -41,7 +49,8 @@ export class UsersService {
     const newUsers = users.map((user) => {
       return {
         id: user.id,
-        name: `${user.first_name} ${user.last_name}`,
+        first_name: user.first_name,
+        last_name: user.last_name,
         email: user.email,
         role: user.roles,
         isBlocked: user.isBlocked,
@@ -64,19 +73,19 @@ export class UsersService {
     }
   }
 
-  // async blockUser(dto: BlockUserDto) {
-  //   try {
-  //     const user = await this.userRepository.findByPk(dto.userId);
-  //     if (!user) {
-  //       throw new HttpException('Not found', HttpStatus.NOT_FOUND);
-  //     }
-  //     user.isBlocked = true;
-  //     await user.save();
-  //     return user;
-  //   } catch (e) {
-  //     console.log(e.message);
-  //   }
-  // }
+  async blockUser(id: number, dto: BlockUserDto) {
+    try {
+      await this.userRepository.findOne({
+        where: { id },
+      });
+      await this.userRepository.update(dto, { where: { id } });
+      return await this.userRepository.findOne({
+        where: { id },
+      });
+    } catch (e) {
+      console.log(e.message);
+    }
+  }
 
   async deleteUser(id: number) {
     try {

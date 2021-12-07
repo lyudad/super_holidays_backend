@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsNumber } from 'class-validator';
+import { IsBoolean } from 'class-validator';
 
 export class BlockUserDto {
-  @ApiProperty({ example: '15', description: 'id' })
-  @IsNumber({}, { message: 'Must be a number' })
-  readonly userId: number;
+  @ApiProperty({ example: 'true', description: 'isBlock' })
+  @IsBoolean({ message: 'must be boolean' })
+  isBlocked: boolean;
 }
