@@ -10,8 +10,8 @@ import {
 import { User } from 'models/users.model';
 
 interface BookingCreationAttrs {
-  start_day: Date;
-  end_day: Date;
+  start_day: string;
+  end_day: string;
   type: string;
   status: string;
   userId: number;
