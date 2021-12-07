@@ -30,7 +30,7 @@ export class UsersController {
   @ApiResponse({ status: 201, type: User })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Post()
-  @hasRoles(Role.ADMIN || Role.SUPER)
+  @hasRoles(Role.ADMIN, Role.SUPER)
   create(@Body() userDto: CreateUserDto) {
     return this.usersService.createUser(userDto);
   }
@@ -47,7 +47,7 @@ export class UsersController {
   @ApiResponse({ status: 200, type: [User] })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Get()
-  @hasRoles(Role.ADMIN || Role.SUPER)
+  @hasRoles(Role.ADMIN, Role.SUPER)
   getAll() {
     return this.usersService.getAllUsers();
   }
@@ -55,8 +55,8 @@ export class UsersController {
   @ApiOperation({ summary: 'Block users' })
   @ApiResponse({ status: 200, type: [User] })
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Post('/:id/block')
-  @hasRoles(Role.ADMIN || Role.SUPER)
+  @Patch('/:id/block')
+  @hasRoles(Role.ADMIN, Role.SUPER)
   blockUser(@Param('id') id: number, @Body() dto: BlockUserDto) {
     return this.usersService.blockUser(id, dto);
   }
@@ -65,7 +65,7 @@ export class UsersController {
   @ApiResponse({ status: 204 })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Delete('/:id')
-  @hasRoles(Role.ADMIN || Role.SUPER)
+  @hasRoles(Role.ADMIN, Role.SUPER)
   deleteUser(@Param('id') id: number) {
     return this.usersService.deleteUser(id);
   }
@@ -74,7 +74,7 @@ export class UsersController {
   @ApiResponse({ status: 200, type: [User] })
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Patch('/:id')
-  @hasRoles(Role.ADMIN || Role.SUPER)
+  @hasRoles(Role.ADMIN, Role.SUPER)
   updateUser(@Param('id') id: number, @Body() dto: UpdateUserDto) {
     return this.usersService.updateUser(id, dto);
   }
@@ -82,7 +82,7 @@ export class UsersController {
   @ApiOperation({ summary: 'Update role' })
   @ApiResponse({ status: 200, type: [User] })
   @UseGuards(JwtAuthGuard, RolesGuard)
-  @Patch('/:id/roles')
+  @Patch('/roles')
   @hasRoles(Role.SUPER)
   updateRole(@Param('id') id: number, @Body() dto: RoleUserDto) {
     return this.usersService.updateRoleUser(id, dto);

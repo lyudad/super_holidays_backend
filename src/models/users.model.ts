@@ -81,7 +81,7 @@ export class User extends Model<User, UserCreationAttrs> {
     type: DataType.ENUM('user', 'admin', 'super'),
     defaultValue: 'user',
   })
-  roles: Role;
+  roles: Role[];
 
   @HasMany(() => Booking)
   dates: Booking[];

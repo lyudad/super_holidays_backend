@@ -3,6 +3,6 @@ import { IsBoolean } from 'class-validator';
 
 export class BlockUserDto {
   @ApiProperty({ example: 'true', description: 'isBlock' })
-  @IsBoolean({ message: 'Boolean' })
+  @IsBoolean({ message: 'must be boolean' })
   isBlocked: boolean;
 }

@@ -70,10 +70,10 @@ export class AuthService {
               first_name: loginUser.first_name,
               last_name: loginUser.last_name,
               email: loginUser.email,
-              role: loginUser.role,
+              role: loginUser.roles,
               isBlocked: loginUser.isBlocked,
-              vacation: loginUser.vacation,
-              sick_leaves: loginUser.sick_leaves,
+              vacation: loginUser.total_vacations,
+              sick_leaves: loginUser.total_sick_leaves,
             };
             return {
               data,
@@ -136,7 +136,7 @@ export class AuthService {
       const user = await this.userService.getUserByEmail(userDto.email);
       const passwordEquals = await bcrypt.compare(
         userDto.password,
-        userDto.password,
+        user.password,
       );
       if (user && passwordEquals) {
         return user;

@@ -67,16 +67,7 @@ export class UsersService {
         where: { email },
         include: { all: true },
       });
-      return {
-        id: user.id,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: user.email,
-        role: user.roles,
-        isBlocked: user.isBlocked,
-        vacation: user.total_vacations,
-        sick_leaves: user.total_sick_leaves,
-      };
+      return user;
     } catch (e) {
       console.log(e.message);
     }
@@ -90,6 +81,7 @@ export class UsersService {
       if (!user) {
         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
       }
+      console.log(dto);
       await this.userRepository.update(dto, { where: { id } });
       return await this.userRepository.findOne({
         where: { id },
