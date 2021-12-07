@@ -1,22 +1,18 @@
 import {
   Body,
   Controller,
-  Post,
   Get,
   UseGuards,
   Delete,
   Param,
   Patch,
-  Req,
 } from '@nestjs/common';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { CreateUserDto } from './create-user.dto';
 import { UsersService } from './users.service';
 import { Role } from 'models/users.model';
 import { JwtAuthGuard } from 'modules/auth/jwt-auth.guard';
 import { BlockUserDto } from './block-user.dto';
 import { UpdateUserDto } from './update-user.dto';
-import { Request } from 'express';
 import { hasRoles } from 'modules/auth/roles.decorator';
 import { RolesGuard } from 'modules/auth/roles.guard';
 import { RoleUserDto } from './role-user.dto';
@@ -29,13 +25,6 @@ import {
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-  @ApiOperation({ summary: 'Get current users' })
-  @ApiResponse({ status: 200, type: CreateUserDtoResponse })
-  @UseGuards(JwtAuthGuard)
-  @Get('/current')
-  getCurrent(@Req() request: Request) {
-    return this.usersService.getCurrentUser(request);
-  }
 
   @ApiOperation({ summary: 'Get all users' })
   @ApiResponse({ status: 200, type: [GetAllUserResponse] })
