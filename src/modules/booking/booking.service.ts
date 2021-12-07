@@ -14,7 +14,7 @@ export class BookingService {
   async create(dto: CreateBookingDto) {
     try {
       const booking = await this.bookingRepository.create(dto);
-      return booking;
+      return this.filterBooking(booking);
     } catch (e) {
       console.log(e.message);
     }
@@ -29,9 +29,10 @@ export class BookingService {
         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
       }
       await this.bookingRepository.update(dto, { where: { id } });
-      return await this.bookingRepository.findOne({
+      const newBook = await this.bookingRepository.findOne({
         where: { id },
       });
+      return this.filterBooking(newBook);
     } catch (error) {
       console.log(error);
     }
@@ -46,11 +47,22 @@ export class BookingService {
         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
       }
       await this.bookingRepository.update(dto, { where: { id } });
-      return await this.bookingRepository.findOne({
+      const booking = await this.bookingRepository.findOne({
         where: { id },
       });
+      return this.filterBooking(booking);
     } catch (error) {
       console.log(error);
     }
+  }
+  private filterBooking(booking: Booking) {
+    return {
+      id: booking.id,
+      start_day: booking.start_day,
+      end_day: booking.end_day,
+      type: booking.type,
+      status: booking.status,
+      userId: booking.userId,
+    };
   }
 }
