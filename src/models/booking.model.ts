@@ -41,17 +41,17 @@ export class Booking extends Model<Booking, BookingCreationAttrs> {
 
   @ApiProperty({ example: '12-12-2021', description: 'Start day' })
   @Column({
-    type: DataType.DATE,
+    type: DataType.STRING,
     allowNull: false,
   })
-  start_day: Date;
+  start_day: string;
 
   @ApiProperty({ example: '15-12-2021', description: 'End day' })
   @Column({
-    type: DataType.DATE,
+    type: DataType.STRING,
     allowNull: false,
   })
-  end_day: Date;
+  end_day: string;
 
   // не понятно
   @ApiProperty({ example: 'vacation', description: 'vacation type' })
