@@ -12,7 +12,7 @@ import {
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { CreateUserDto } from './create-user.dto';
 import { UsersService } from './users.service';
-import { Role, User } from 'models/users.model';
+import { Role } from 'models/users.model';
 import { JwtAuthGuard } from 'modules/auth/jwt-auth.guard';
 import { BlockUserDto } from './block-user.dto';
 import { UpdateUserDto } from './update-user.dto';
@@ -29,16 +29,6 @@ import {
 @Controller('users')
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
-
-  @ApiOperation({ summary: 'Create user' })
-  @ApiResponse({ status: 201, type: CreateUserDtoResponse })
-  @UseGuards(JwtAuthGuard, RolesGuard)
-  @Post()
-  @hasRoles(Role.ADMIN, Role.SUPER)
-  create(@Body() userDto: CreateUserDto) {
-    return this.usersService.createUser(userDto);
-  }
-
   @ApiOperation({ summary: 'Get current users' })
   @ApiResponse({ status: 200, type: CreateUserDtoResponse })
   @UseGuards(JwtAuthGuard)
