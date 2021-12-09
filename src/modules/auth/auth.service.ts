@@ -25,10 +25,10 @@ export class AuthService {
           HttpStatus.BAD_REQUEST,
         );
       }
-      const hasPassword = await bcrypt.hash(userDto.password, 5);
+      // const hasPassword = await bcrypt.hash(userDto.password, 5);
       const user = await this.userService.createUser({
         ...userDto,
-        password: hasPassword,
+        // password: hasPassword,
       });
       return user;
     } catch (e) {
