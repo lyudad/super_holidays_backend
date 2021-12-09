@@ -25,15 +25,21 @@ export class AuthService {
           HttpStatus.BAD_REQUEST,
         );
       }
-      // const hasPassword = await bcrypt.hash(userDto.password, 5);
       const user = await this.userService.createUser({
         ...userDto,
-        // password: hasPassword,
       });
       return user;
     } catch (e) {
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  async createPassword(email: string, password: string) {
+    const hasPassword = await bcrypt.hash(password, 5);
+    await this.userRepository.update(
+      { password: hasPassword },
+      { where: { email } },
+    );
   }
 
   async login(userDto: LoginUserDto) {
