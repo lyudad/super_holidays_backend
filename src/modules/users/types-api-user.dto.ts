@@ -32,9 +32,9 @@ export class GetAllUserResponseDates {
   @ApiProperty({ example: 1, description: 'Id' })
   id: number;
   @ApiProperty({ example: 'Fri Dec 03 2021', description: 'Start day' })
-  start_day: string;
+  start_day: Date;
   @ApiProperty({ example: 'Sun Dec 05 2021', description: 'End day' })
-  end_day: string;
+  end_day: Date;
   @ApiProperty({ example: 'vacation', description: 'Type action' })
   type: VacationType;
   @ApiProperty({ example: 'pending', description: 'Status action' })
