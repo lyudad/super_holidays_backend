@@ -25,9 +25,7 @@ export class AuthService {
           HttpStatus.BAD_REQUEST,
         );
       }
-      const user = await this.userService.createUser({
-        ...userDto,
-      });
+      const user = await this.userService.createUser(userDto);
       return user;
     } catch (e) {
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
