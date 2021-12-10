@@ -111,14 +111,7 @@ export class UsersService {
       isBlocked: user.isBlocked,
       vacation: user.total_vacations,
       sick_leaves: user.total_sick_leaves,
-      dates: user?.dates.map((e) => ({
-        id: e.id,
-        start_day: e.start_day,
-        end_day: e.end_day,
-        type: e.type,
-        status: e.status,
-        userId: e.userId,
-      })),
+      dates: user?.dates,
     };
   }
 }
