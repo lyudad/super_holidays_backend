@@ -1,22 +1,29 @@
+import { AuthService } from './../auth/auth.service';
 import { MailerService } from '@nestjs-modules/mailer';
 import { Injectable } from '@nestjs/common';
-import { LoginUserDto } from 'modules/users/create-user.dto';
+import { EmailDto } from './mail.dto';
+import { nanoid } from 'nanoid';
 
 @Injectable()
 export class MailService {
-  constructor(private mailerService: MailerService) {}
+  constructor(
+    private mailerService: MailerService,
+    private authService: AuthService,
+  ) {}
 
-  async sendUserInformation(user: LoginUserDto) {
+  async sendUserInformation(user: EmailDto) {
+    const password = nanoid();
     await this.mailerService.sendMail({
       to: user.email,
       from: '"Support Team" <alexeysystem@meta.ua>',
       subject: 'Welcome to ZenBit! This is your access',
       template: './email-template',
       context: {
-        name: user.email,
+        name: user.name,
         email: user.email,
-        password: user.password,
+        password: password,
       },
     });
+    await this.authService.createPassword(user.email, password);
   }
 }
