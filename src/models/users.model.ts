@@ -51,7 +51,7 @@ export class User extends Model<User, UserCreationAttrs> {
   @ApiProperty({ example: '123456', description: 'password' })
   @Column({
     type: DataType.STRING,
-    allowNull: false,
+    defaultValue: '',
   })
   password: string;
 
@@ -81,7 +81,7 @@ export class User extends Model<User, UserCreationAttrs> {
     type: DataType.ENUM('user', 'admin', 'super'),
     defaultValue: 'user',
   })
-  roles: Role[];
+  roles: Role;
 
   @HasMany(() => Booking)
   dates: Booking[];
