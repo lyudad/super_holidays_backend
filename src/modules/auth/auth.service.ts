@@ -25,10 +25,10 @@ export class AuthService {
           HttpStatus.BAD_REQUEST,
         );
       }
-      const hasPassword = await bcrypt.hash(userDto.password, 5);
+      // const hasPassword = await bcrypt.hash(userDto.password, 5);
       const user = await this.userService.createUser({
         ...userDto,
-        password: hasPassword,
+        // password: hasPassword,
       });
       return user;
     } catch (e) {
@@ -39,7 +39,6 @@ export class AuthService {
   async login(userDto: LoginUserDto) {
     try {
       const loginUser = await this.validateUser(userDto);
-      console.log(loginUser);
       try {
         const newSession = await this.sessionRepository.create({
           uid: loginUser.id,
@@ -135,17 +134,13 @@ export class AuthService {
   private async validateUser(userDto: LoginUserDto) {
     try {
       const user = await this.userService.getUserByEmail(userDto.email);
-      console.log(user);
-      console.log(userDto.password);
-
-      // const passwordEquals = await bcrypt.compare(
-      //   userDto.password,
-      //   user.password,
-      // );
-      // if (user && passwordEquals) {
-      //   return user;
-      // }
-      return user;
+      const passwordEquals = await bcrypt.compare(
+        userDto.password,
+        user.password,
+      );
+      if (user && passwordEquals) {
+        return user;
+      }
     } catch (e) {
       throw new HttpException(e.message, HttpStatus.BAD_REQUEST);
     }

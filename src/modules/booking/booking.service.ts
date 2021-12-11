@@ -14,7 +14,12 @@ export class BookingService {
   async create(dto: CreateBookingDto) {
     try {
       const booking = await this.bookingRepository.create(dto);
-      return this.filterBooking(booking);
+      return await this.bookingRepository.findOne({
+        where: { id: booking.id },
+        attributes: {
+          exclude: ['createdAt', 'updatedAt'],
+        },
+      });
     } catch (e) {
       console.log(e.message);
     }
@@ -29,10 +34,12 @@ export class BookingService {
         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
       }
       await this.bookingRepository.update(dto, { where: { id } });
-      const newBook = await this.bookingRepository.findOne({
+      return await this.bookingRepository.findOne({
         where: { id },
+        attributes: {
+          exclude: ['createdAt', 'updatedAt'],
+        },
       });
-      return this.filterBooking(newBook);
     } catch (error) {
       console.log(error);
     }
@@ -47,22 +54,14 @@ export class BookingService {
         throw new HttpException('Not found', HttpStatus.NOT_FOUND);
       }
       await this.bookingRepository.update(dto, { where: { id } });
-      const booking = await this.bookingRepository.findOne({
+      return await this.bookingRepository.findOne({
         where: { id },
+        attributes: {
+          exclude: ['createdAt', 'updatedAt'],
+        },
       });
-      return this.filterBooking(booking);
     } catch (error) {
       console.log(error);
     }
-  }
-  private filterBooking(booking: Booking) {
-    return {
-      id: booking.id,
-      start_day: booking.start_day,
-      end_day: booking.end_day,
-      type: booking.type,
-      status: booking.status,
-      userId: booking.userId,
-    };
   }
 }

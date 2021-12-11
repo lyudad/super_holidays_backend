@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { BlockUserDto } from './block-user.dto';
 import { CreateUserDto } from './create-user.dto';
 import { User } from 'models/users.model';
+import { Booking } from 'models/booking.model';
 import { UpdateUserDto } from './update-user.dto';
 import { RoleUserDto } from './role-user.dto';
 
@@ -20,7 +21,29 @@ export class UsersService {
 
   async getAllUsers() {
     const users = await this.userRepository.findAll({
-      include: { all: true },
+      attributes: [
+        'id',
+        'first_name',
+        'last_name',
+        'email',
+        'total_sick_leaves',
+        'total_vacations',
+        'isBlocked',
+        'roles',
+      ],
+      include: [
+        {
+          model: Booking,
+          attributes: [
+            'id',
+            'userId',
+            'start_day',
+            'end_day',
+            'type',
+            'status',
+          ],
+        },
+      ],
     });
 
     return users;
@@ -46,6 +69,9 @@ export class UsersService {
       await this.userRepository.update(dto, { where: { id } });
       return await this.userRepository.findOne({
         where: { id },
+        attributes: {
+          exclude: ['password', 'createdAt', 'updatedAt'],
+        },
       });
     } catch (e) {
       console.log(e.message);
@@ -54,10 +80,9 @@ export class UsersService {
 
   async deleteUser(id: number) {
     try {
-      const user = await this.userRepository.findOne({
+      await this.userRepository.destroy({
         where: { id },
       });
-      return await this.userRepository.delete(user);
     } catch (e) {
       console.log(e.message);
     }
@@ -74,6 +99,9 @@ export class UsersService {
       await this.userRepository.update(dto, { where: { id } });
       return await this.userRepository.findOne({
         where: { id },
+        attributes: {
+          exclude: ['password', 'createdAt', 'updatedAt'],
+        },
       });
     } catch (error) {
       console.log(error);
@@ -89,6 +117,9 @@ export class UsersService {
       await this.userRepository.update(dto, { where: { id } });
       return await this.userRepository.findOne({
         where: { id },
+        attributes: {
+          exclude: ['password', 'createdAt', 'updatedAt'],
+        },
       });
     } catch (e) {
       console.log(e.message);
