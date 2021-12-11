@@ -21,27 +21,15 @@ export class UsersService {
 
   async getAllUsers() {
     const users = await this.userRepository.findAll({
-      attributes: [
-        'id',
-        'first_name',
-        'last_name',
-        'email',
-        'total_sick_leaves',
-        'total_vacations',
-        'isBlocked',
-        'roles',
-      ],
+      attributes: {
+        exclude: ['password', 'createdAt', 'updatedAt'],
+      },
       include: [
         {
           model: Booking,
-          attributes: [
-            'id',
-            'userId',
-            'start_day',
-            'end_day',
-            'type',
-            'status',
-          ],
+          attributes: {
+            exclude: ['createdAt', 'updatedAt'],
+          },
         },
       ],
     });
