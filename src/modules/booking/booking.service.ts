@@ -14,7 +14,12 @@ export class BookingService {
   async create(dto: CreateBookingDto) {
     try {
       const booking = await this.bookingRepository.create(dto);
-      return booking;
+      return await this.bookingRepository.findOne({
+        where: { id: booking.id },
+        attributes: {
+          exclude: ['createdAt', 'updatedAt'],
+        },
+      });
     } catch (e) {
       console.log(e.message);
     }
@@ -31,6 +36,9 @@ export class BookingService {
       await this.bookingRepository.update(dto, { where: { id } });
       return await this.bookingRepository.findOne({
         where: { id },
+        attributes: {
+          exclude: ['createdAt', 'updatedAt'],
+        },
       });
     } catch (error) {
       console.log(error);
@@ -48,6 +56,9 @@ export class BookingService {
       await this.bookingRepository.update(dto, { where: { id } });
       return await this.bookingRepository.findOne({
         where: { id },
+        attributes: {
+          exclude: ['createdAt', 'updatedAt'],
+        },
       });
     } catch (error) {
       console.log(error);

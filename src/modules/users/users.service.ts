@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/sequelize';
 import { BlockUserDto } from './block-user.dto';
 import { CreateUserDto } from './create-user.dto';
 import { User } from 'models/users.model';
+import { Booking } from 'models/booking.model';
 import { UpdateUserDto } from './update-user.dto';
 import { RoleUserDto } from './role-user.dto';
 
@@ -12,53 +13,28 @@ export class UsersService {
 
   async createUser(dto: CreateUserDto) {
     try {
-      const user = await this.userRepository.create(dto);
-      return {
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: user.email,
-        role: user.roles,
-        vacation: user.total_vacations,
-        sick_leaves: user.total_sick_leaves,
-      };
+      return await this.userRepository.create(dto);
     } catch (e) {
       console.log(e.message);
     }
   }
 
-  async getCurrentUser(res) {
-    const user = await this.userRepository.findOne({
-      where: { id: res.user.id },
-    });
-
-    return {
-      first_name: user.first_name,
-      last_name: user.last_name,
-      email: user.email,
-      role: user.roles,
-      vacation: user.total_vacations,
-      sick_leaves: user.total_sick_leaves,
-    };
-  }
-
   async getAllUsers() {
     const users = await this.userRepository.findAll({
-      include: { all: true },
+      attributes: {
+        exclude: ['password', 'createdAt', 'updatedAt'],
+      },
+      include: [
+        {
+          model: Booking,
+          attributes: {
+            exclude: ['createdAt', 'updatedAt'],
+          },
+        },
+      ],
     });
 
-    const newUsers = users.map((user) => {
-      return {
-        id: user.id,
-        first_name: user.first_name,
-        last_name: user.last_name,
-        email: user.email,
-        role: user.roles,
-        isBlocked: user.isBlocked,
-        vacation: user.total_vacations,
-        sick_leaves: user.total_sick_leaves,
-      };
-    });
-    return newUsers;
+    return users;
   }
 
   async getUserByEmail(email: string) {
@@ -81,6 +57,9 @@ export class UsersService {
       await this.userRepository.update(dto, { where: { id } });
       return await this.userRepository.findOne({
         where: { id },
+        attributes: {
+          exclude: ['password', 'createdAt', 'updatedAt'],
+        },
       });
     } catch (e) {
       console.log(e.message);
@@ -89,10 +68,9 @@ export class UsersService {
 
   async deleteUser(id: number) {
     try {
-      const user = await this.userRepository.findOne({
+      await this.userRepository.destroy({
         where: { id },
       });
-      return this.userRepository.delete(user);
     } catch (e) {
       console.log(e.message);
     }
@@ -109,6 +87,9 @@ export class UsersService {
       await this.userRepository.update(dto, { where: { id } });
       return await this.userRepository.findOne({
         where: { id },
+        attributes: {
+          exclude: ['password', 'createdAt', 'updatedAt'],
+        },
       });
     } catch (error) {
       console.log(error);
@@ -124,6 +105,9 @@ export class UsersService {
       await this.userRepository.update(dto, { where: { id } });
       return await this.userRepository.findOne({
         where: { id },
+        attributes: {
+          exclude: ['password', 'createdAt', 'updatedAt'],
+        },
       });
     } catch (e) {
       console.log(e.message);

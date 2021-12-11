@@ -6,7 +6,6 @@ import {
   Patch,
   UseGuards,
 } from '@nestjs/common';
-import { Booking } from 'models/booking.model';
 import { CreateBookingDto } from './create-booking.dto';
 import { UpdateBookingDto } from './update-booking.dto';
 import { BookingService } from './booking.service';
@@ -23,7 +22,7 @@ export class BookingController {
   constructor(private bookingService: BookingService) {}
 
   @ApiOperation({ summary: 'Create booking' })
-  @ApiResponse({ status: 200, type: Booking })
+  @ApiResponse({ status: 200, type: CreateBookingDto })
   @UseGuards(JwtAuthGuard)
   @Post()
   @UseGuards(JwtAuthGuard)
@@ -32,7 +31,7 @@ export class BookingController {
   }
 
   @ApiOperation({ summary: 'Update booking' })
-  @ApiResponse({ status: 200, type: Booking })
+  @ApiResponse({ status: 200, type: CreateBookingDto })
   @Patch('/:id')
   @UseGuards(JwtAuthGuard)
   updateBooking(@Param('id') id: number, @Body() dto: UpdateBookingDto) {
@@ -40,7 +39,7 @@ export class BookingController {
   }
 
   @ApiOperation({ summary: 'Update status' })
-  @ApiResponse({ status: 200, type: Booking })
+  @ApiResponse({ status: 200, type: CreateBookingDto })
   @Patch('/:id/status')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @hasRoles(Role.ADMIN, Role.SUPER)
