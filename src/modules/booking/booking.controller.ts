@@ -1,6 +1,7 @@
 import {
   Body,
   Controller,
+  Get,
   Post,
   Param,
   Patch,
@@ -15,6 +16,7 @@ import { UpdateStatusDto } from './update-status.dto';
 import { hasRoles } from 'modules/auth/roles.decorator';
 import { RolesGuard } from 'modules/auth/roles.guard';
 import { Role } from 'models/users.model';
+import { GetAllUserResponseDates } from 'modules/users/types-api-user.dto';
 
 @ApiTags('Booking')
 @Controller('booking')
@@ -45,5 +47,13 @@ export class BookingController {
   @hasRoles(Role.ADMIN, Role.SUPER)
   updateStatus(@Param('id') id: number, @Body() dto: UpdateStatusDto) {
     return this.bookingService.updateStatus(id, dto);
+  }
+
+  @ApiOperation({ summary: 'Get user bookings by id' })
+  @ApiResponse({ status: 200, type: [GetAllUserResponseDates] })
+  @UseGuards(JwtAuthGuard)
+  @Get('/:id')
+  getCurrentBooking(@Param('id') id: number) {
+    return this.bookingService.getCurrentBooking(id);
   }
 }

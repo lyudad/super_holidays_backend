@@ -64,4 +64,16 @@ export class BookingService {
       console.log(error);
     }
   }
+  async getCurrentBooking(id: number) {
+    try {
+      return await this.bookingRepository.findAll({
+        where: { userId: id },
+        attributes: {
+          exclude: ['createdAt', 'updatedAt'],
+        },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
