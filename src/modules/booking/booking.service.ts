@@ -45,6 +45,16 @@ export class BookingService {
     }
   }
 
+  async deleteBooking(id: number) {
+    try {
+      await this.bookingRepository.destroy({
+        where: { id },
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   async updateStatus(id: number, dto: UpdateStatusDto) {
     try {
       const user = await this.bookingRepository.findOne({
