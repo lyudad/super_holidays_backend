@@ -5,6 +5,7 @@ import {
   Post,
   Param,
   Patch,
+  Delete,
   UseGuards,
 } from '@nestjs/common';
 import { CreateBookingDto } from './create-booking.dto';
@@ -38,6 +39,14 @@ export class BookingController {
   @UseGuards(JwtAuthGuard)
   updateBooking(@Param('id') id: number, @Body() dto: UpdateBookingDto) {
     return this.bookingService.updateBooking(id, dto);
+  }
+
+  @ApiOperation({ summary: 'Delete booking' })
+  @ApiResponse({ status: 202 })
+  @Delete('/:id')
+  @UseGuards(JwtAuthGuard)
+  deleteBooking(@Param('id') id: number) {
+    return this.bookingService.deleteBooking(id);
   }
 
   @ApiOperation({ summary: 'Update status' })
