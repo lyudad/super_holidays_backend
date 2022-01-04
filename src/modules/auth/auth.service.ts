@@ -76,8 +76,8 @@ export class AuthService {
               email: loginUser.email,
               role: loginUser.roles,
               isBlocked: loginUser.isBlocked,
-              vacation: loginUser.total_vacations,
-              sick_leaves: loginUser.total_sick_leaves,
+              total_vacations: loginUser.total_vacations,
+              total_sick_leaves: loginUser.total_sick_leaves,
             };
             return {
               data,
